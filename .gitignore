@@ -1,8 +1,10 @@
 .idea
+database
 out
 target
 *.iml
 log
 *.patch
+
 
 

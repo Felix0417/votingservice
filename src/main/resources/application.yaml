@@ -17,10 +17,15 @@ spring:
   datasource:
     # ImMemory
 #    url: jdbc:h2:mem:voting
-    url: jdbc:h2:file:../../database
+    url: jdbc:h2:file:./database/voting
     #    tcp: jdbc:h2:tcp://localhost:9092/mem:voting
     username: sa
     password:
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
 
   # Jackson Serialization Issue Resolver
   jackson:
@@ -38,8 +43,9 @@ spring:
 logging:
   level:
     root: WARN
-    ru.javaops.topjava2: DEBUG
+    ru.felix.ru.felix.votingservice: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
+
 
 server.servlet:
   encoding:
