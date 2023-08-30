@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +31,6 @@ public class SecurityConfig {
     public static final PasswordEncoder PASSWORD_ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     private final UserRepository userRepository;
-    private final RestAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -55,14 +56,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
-                .requestMatchers(HttpMethod.POST, "/api/profile").anonymous()
-                .requestMatchers("/api/**").authenticated()
-                .and().httpBasic()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().csrf().disable();
+        http.securityMatcher("/api/**").authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/profile").anonymous()
+                        .requestMatchers("/api/**").authenticated()
+                ).httpBasic(Customizer.withDefaults())
+                .sessionManagement(smc -> smc
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                ).csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 }
