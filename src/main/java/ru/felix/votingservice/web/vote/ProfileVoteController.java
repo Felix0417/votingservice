@@ -1,8 +1,7 @@
 package ru.felix.votingservice.web.vote;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,13 +11,14 @@ import ru.felix.votingservice.to.VoteTo;
 import ru.felix.votingservice.web.AuthUser;
 
 @RestController
+@RequestMapping(path = ProfileVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/profile/vote", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileVoteController {
 
-    private final VoteService service;
+    static final String REST_URL = "/api/profile/vote";
 
-    private static final Logger log = LoggerFactory.getLogger(ProfileVoteController.class);
+    private final VoteService service;
 
     @GetMapping
     public int get() {

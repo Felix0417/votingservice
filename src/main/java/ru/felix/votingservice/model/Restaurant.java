@@ -1,6 +1,5 @@
 package ru.felix.votingservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,15 +16,11 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Restaurant extends NamedEntity{
+public class Restaurant extends NamedEntity {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Nullable
     private Set<Dish> dishes;
-
-    public boolean hasDishes(){
-        return dishes != null;
-    }
 }

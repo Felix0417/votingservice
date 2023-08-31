@@ -2,57 +2,66 @@ package ru.felix.votingservice.web.dish;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.felix.votingservice.model.Dish;
 import ru.felix.votingservice.service.DishService;
 
+import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
+import static ru.felix.votingservice.util.validation.ValidationUtil.checkNew;
 
 @RestController
-@RequestMapping(value = "/api/admin/dish")
+@RequestMapping(value = AdminDishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 @RequiredArgsConstructor
 public class AdminDishController {
+    static final String REST_URL = "/api/admin/restaurant";
 
     private final DishService service;
 
-    private static final Logger log = LoggerFactory.getLogger(AdminDishController.class);
-
-    @GetMapping
-    public List<Dish> getAll() {
-        log.info("get all Dishes");
-        return service.getAll();
+    @GetMapping("/{restaurantId}")
+    public List<Dish> getAllForCurrentDate(@PathVariable int restaurantId) {
+        log.info("get all dishes by restaurant - {} from current date", restaurantId);
+        return service.getAllByRestaurant(restaurantId, LocalDate.now());
     }
 
-    @GetMapping("/{id}")
-    public Dish get(@PathVariable int id) {
-        log.info("get Dish by id - {}", id);
-        return service.get(id);
+    @GetMapping("/{restaurantId}/from-date")
+    public List<Dish> getAllFromDate(@PathVariable int restaurantId, @RequestParam LocalDate date) {
+        log.info("get all dishes by restaurant - {} from date - {}", restaurantId, date);
+        return service.getAllByRestaurant(restaurantId, date);
     }
 
-    @PostMapping
+    @PostMapping(value = "/{restaurantId}/dish")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void createOrUpdate(@Valid @RequestBody Dish dish) {
-        if (dish.isNew()) {
-            log.info("create new Dish - {}", dish);
-            service.create(dish);
-        }
+    public ResponseEntity<Dish> create(@PathVariable int restaurantId, @Valid @RequestBody Dish dish) {
+        checkNew(dish);
+        log.info("create new Dish - {}", dish);
+        Dish newDish = service.create(restaurantId, dish);
+        URI newDishUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(newDish.getId()).toUri();
+        return ResponseEntity.created(newDishUri).body(newDish);
     }
 
-    @PutMapping("/{id}")
-    public void update(@Valid @RequestBody Dish dish, @PathVariable int id) {
-        log.info("update Dish - {}", dish);
-        assureIdConsistent(dish, id);
-        service.update(dish);
+    @PutMapping(value = "/{restaurantId}/dish/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable int restaurantId, @PathVariable int dishId, @Valid @RequestBody Dish dish) {
+        assureIdConsistent(dish, restaurantId);
+        log.info("update dish - {} with id - {} from restaurant - {}", dish, dishId, restaurantId);
+        service.update(restaurantId, dishId, dish);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        log.info("delete dish with id - {}", id);
-        service.delete(id);
+    @DeleteMapping("/{restaurantId}/dish/{dishId}")
+    public void delete(@PathVariable int restaurantId, @PathVariable int dishId) {
+        log.info("delete dish with id - {} from restaurant - {}", dishId, restaurantId);
+        service.delete(restaurantId, dishId);
     }
 }

@@ -43,7 +43,7 @@ spring:
 logging:
   level:
     root: WARN
-    ru.felix.ru.felix.votingservice: DEBUG
+    ru.felix.votingservice: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 

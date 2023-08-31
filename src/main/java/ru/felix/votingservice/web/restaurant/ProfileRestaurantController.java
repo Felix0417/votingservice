@@ -1,8 +1,7 @@
 package ru.felix.votingservice.web.restaurant;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +14,14 @@ import ru.felix.votingservice.service.RestaurantService;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/user/restaurant", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = ProfileRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 @RequiredArgsConstructor
 public class ProfileRestaurantController {
 
-    private final RestaurantService service;
+    static final String REST_URL = "/api/user/restaurant";
 
-    private final Logger log = LoggerFactory.getLogger(ProfileRestaurantController.class);
+    private final RestaurantService service;
 
     @GetMapping
     public List<Restaurant> getAll() {

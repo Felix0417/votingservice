@@ -5,13 +5,8 @@ import org.springframework.data.repository.query.Param;
 import ru.felix.votingservice.model.Vote;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface VoteRepository extends BaseRepository<Vote> {
-
-    @Query("SELECT v FROM Vote v WHERE v.user.id=:userId")
-    List<Vote> getAllById(@Param("userId") int userId);
-
     @Query("SELECT v FROM Vote v WHERE v.user.id=:userId AND v.localDate=:currentDate")
     Vote getByIdOnCurrentDate(@Param("userId") int id, @Param("currentDate") LocalDate localDate);
 

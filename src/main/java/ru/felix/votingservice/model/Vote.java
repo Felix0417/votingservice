@@ -7,7 +7,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "vote")
@@ -24,7 +23,7 @@ public class Vote extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(name = "voting_date_time", nullable = false)
+    @Column(name = "voting_date", nullable = false)
     private LocalDate localDate;
 
     @JoinColumn(name = "restaurant_id", nullable = false)

@@ -1,27 +1,23 @@
 package ru.felix.votingservice.to;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Null;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.lang.Nullable;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class VoteTo {
-
-    @Nullable
-    private Integer userId;
+public class VoteTo extends BaseTo {
 
     @NotBlank
     private Integer restaurantId;
 
-    @Nullable
-    private LocalDateTime localDateTime;
+    private LocalDate localDate;
+
+    public VoteTo(Integer id, Integer restaurantId, LocalDate localDate) {
+        super(id);
+        this.restaurantId = restaurantId;
+        this.localDate = localDate;
+    }
 }
