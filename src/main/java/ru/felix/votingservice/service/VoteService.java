@@ -43,6 +43,7 @@ public class VoteService {
             Vote vote = new Vote(getUser(userId), dateTime.toLocalDate(), getRestaurant(restaurantId));
             voteRepository.save(vote);
         }
+        // todo throw ex
     }
 
     @Transactional
@@ -54,11 +55,17 @@ public class VoteService {
             vote.setRestaurant(getRestaurant(restaurantId));
             ValidationUtil.checkNotFoundWithId(voteRepository.save(vote), vote.id());
         }
+        // todo throw ex
     }
 
     public int getWinnerRestaurantIdFromDate(LocalDate date) {
         Assert.notNull(date, "date must not be null");
         return ValidationUtil.checkNotFound(voteRepository.getWinnerFromDate(date), "date " + date);
+    }
+
+    @Transactional
+    public void deleteFromCurrentDate(int userId) {
+        voteRepository.delete(get(userId));
     }
 
     public User getUser(int userId) {
@@ -71,10 +78,5 @@ public class VoteService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
         Assert.notNull(restaurant, "restaurant must not be null");
         return restaurant;
-    }
-
-    @Transactional
-    public void deleteFromCurrentDate(int userId) {
-        voteRepository.delete(get(userId));
     }
 }

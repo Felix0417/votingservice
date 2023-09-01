@@ -24,9 +24,6 @@ public class DishService {
 
     private final RestaurantRepository restaurantRepository;
 
-    public List<Dish> getAllByRestaurant(int restaurantId, LocalDate date) {
-        return dishRepository.findAllByRestaurantId(restaurantId, date);
-    }
 
     public Dish getByRestaurant(int restaurantId, int dishId) {
         return checkNotFoundWithId(dishRepository.findByRestaurantIdAndId(restaurantId, dishId), dishId);

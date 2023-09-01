@@ -16,6 +16,7 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(callSuper = false)
 public class Restaurant extends NamedEntity {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -23,4 +24,12 @@ public class Restaurant extends NamedEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Nullable
     private Set<Dish> dishes;
+
+    public Restaurant(Integer id, String name) {
+        super(id, name);
+    }
+
+    public Restaurant(Restaurant restaurant) {
+        this(restaurant.id, restaurant.name);
+    }
 }

@@ -25,4 +25,9 @@ public class Dish extends NamedEntity {
     @Column(name = "price", nullable = false)
     private int price;
 
+    public Dish(Integer id, String name, LocalDate localDate, int price) {
+        super(id, name);
+        this.localDate = localDate;
+        this.price = price;
+    }
 }

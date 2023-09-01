@@ -27,18 +27,6 @@ public class AdminDishController {
 
     private final DishService service;
 
-    @GetMapping("/{restaurantId}")
-    public List<Dish> getAllForCurrentDate(@PathVariable int restaurantId) {
-        log.info("get all dishes by restaurant - {} from current date", restaurantId);
-        return service.getAllByRestaurant(restaurantId, LocalDate.now());
-    }
-
-    @GetMapping("/{restaurantId}/from-date")
-    public List<Dish> getAllFromDate(@PathVariable int restaurantId, @RequestParam LocalDate date) {
-        log.info("get all dishes by restaurant - {} from date - {}", restaurantId, date);
-        return service.getAllByRestaurant(restaurantId, date);
-    }
-
     @PostMapping(value = "/{restaurantId}/dish")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<Dish> create(@PathVariable int restaurantId, @Valid @RequestBody Dish dish) {

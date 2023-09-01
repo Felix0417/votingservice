@@ -1,7 +1,6 @@
 package ru.felix.votingservice.web.restaurant;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,7 +11,7 @@ import ru.felix.votingservice.model.Restaurant;
 import ru.felix.votingservice.service.RestaurantService;
 
 import java.net.URI;
-import java.util.List;
+import java.time.LocalDate;
 
 import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.felix.votingservice.util.validation.ValidationUtil.checkNew;
@@ -20,18 +19,14 @@ import static ru.felix.votingservice.util.validation.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-@RequiredArgsConstructor
-public class AdminRestaurantController {
+public class AdminRestaurantController extends AbstractRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurant";
 
-    private final RestaurantService service;
-
-    @GetMapping
-    public List<Restaurant> getAll() {
-        log.info("get all restaurants");
-        return service.getAll();
+    public AdminRestaurantController(RestaurantService service) {
+        super(service);
     }
+
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
@@ -53,8 +48,15 @@ public class AdminRestaurantController {
     }
 
     @DeleteMapping("/{restaurantId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int restaurantId) {
         log.info("delete restaurant - {} ", restaurantId);
         service.delete(restaurantId);
+    }
+
+    @GetMapping("/{restaurantId}/from-date")
+    public Restaurant getWithDishesFromDate(@PathVariable int restaurantId, @RequestParam LocalDate localDate) {
+        log.info("get restaurant - {} with menu from current date", restaurantId);
+        return service.getWithDishes(restaurantId, localDate).getBody();
     }
 }
