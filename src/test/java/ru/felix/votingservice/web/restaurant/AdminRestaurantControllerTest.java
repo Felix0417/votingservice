@@ -99,4 +99,20 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         assertFalse(repository.findById(restaurant1.id()).isPresent());
     }
 
+    @Test
+    public void getWithDishesFromDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + restaurant1.id() + "/from-date").param("localDate", "2020-01-31"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER_WITH_DISHES.contentJson(restaurantWithOldDishes));
+    }
+
+    @Test
+    public void getWitDishesWithEmptyDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + restaurant1.id() + "/from-date")
+                .param("localDate", ""))
+                .andExpect(status().isUnprocessableEntity());
+    }
 }

@@ -6,11 +6,20 @@ import ru.felix.votingservice.web.dish.DishTestData;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class RestaurantTestData {
 
-    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class, "dishes");
+    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class,  "dishes");
 
-    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER_WITH_DISHES = MatcherFactory.usingEqualsComparator(Restaurant.class);
+    public static MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER_WITH_DISHES =
+            MatcherFactory.usingAssertions(Restaurant.class,
+//                         No need use ignoringAllOverriddenEquals, see https://assertj.github.io/doc/#breaking-changes
+                    (a, e) -> assertThat(a).usingRecursiveComparison()
+                            .ignoringFields("dishes.id", "dishes.restaurant").isEqualTo(e),
+                    (a, e) -> {
+                        throw new UnsupportedOperationException();
+                    });
 
     public static int FIRST_RESTAURANT_ID = 1;
 
@@ -32,7 +41,7 @@ public class RestaurantTestData {
 
     public static final Restaurant restaurant5 = new Restaurant(FIFTH_RESTAURANT_ID, "Чайхана");
 
-    public static final Restaurant restaurantWithOldDishes = new Restaurant(restaurant1);
+    public static final Restaurant restaurantWithOldDishes = new Restaurant(FIRST_RESTAURANT_ID, "Яръ");
 
     public static final List<Restaurant> restaurants = List.of(restaurant1, restaurant2, restaurant3, restaurant4, restaurant5);
 

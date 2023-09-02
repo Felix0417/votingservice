@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Table(name = "dish")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Dish extends NamedEntity {
 

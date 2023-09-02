@@ -7,7 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.lang.Nullable;
 
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
@@ -23,7 +23,7 @@ public class Restaurant extends NamedEntity {
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Nullable
-    private Set<Dish> dishes;
+    private List<Dish> dishes;
 
     public Restaurant(Integer id, String name) {
         super(id, name);
