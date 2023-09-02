@@ -2,9 +2,11 @@ package ru.felix.votingservice.web.restaurant;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.felix.votingservice.model.Restaurant;
@@ -55,7 +57,8 @@ public class AdminRestaurantController extends AbstractRestaurantController {
     }
 
     @GetMapping("/{restaurantId}/from-date")
-    public Restaurant getWithDishesFromDate(@PathVariable int restaurantId, @RequestParam LocalDate localDate) {
+    public Restaurant getWithDishesFromDate(@PathVariable int restaurantId,
+                                            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate localDate) {
         log.info("get restaurant - {} with menu from current date", restaurantId);
         return service.getWithDishes(restaurantId, localDate).getBody();
     }

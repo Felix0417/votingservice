@@ -34,16 +34,23 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(restaurant1, restaurant2, restaurant3, restaurant4, restaurant5));
+                .andExpect(RESTAURANT_MATCHER.contentJson(restaurants));
     }
 
     @Test
     public void getWithDishes() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + restaurant1.id()))
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT1_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_MATCHER_WITH_DISHES.contentJson(restaurant1));
+    }
+
+    @Test
+    public void getNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + NOT_FOUND_RESTAURANT))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -63,7 +70,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     void wrongCreate() throws Exception {
         Restaurant created = RestaurantTestData.getNew();
-        perform(MockMvcRequestBuilders.post(REST_URL_SLASH + restaurant2.id())
+        perform(MockMvcRequestBuilders.post(REST_URL_SLASH + RESTAURANT2_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(created)))
                 .andDo(print())
@@ -73,19 +80,30 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + updated.id())
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        RESTAURANT_MATCHER.assertMatch(repository.getExisted(restaurant1.id()), updated);
+        RESTAURANT_MATCHER.assertMatch(repository.getExisted(RESTAURANT1_ID), updated);
     }
 
     @Test
     void wrongUpdate() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + restaurant2.id())
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT2_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void updateHtmlUnsafe() throws Exception {
+        Restaurant updated = RestaurantTestData.getUpdated();
+        updated.setName("<script>alert(123)</script>");
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
@@ -101,7 +119,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     public void getWithDishesFromDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + restaurant1.id() + "/from-date").param("localDate", "2020-01-31"))
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT1_ID + "/from-date").param("localDate", "2020-01-31"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -111,8 +129,11 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     public void getWitDishesWithEmptyDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + restaurant1.id() + "/from-date")
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT1_ID + "/from-date")
                 .param("localDate", ""))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER_WITH_DISHES.contentJson(restaurant1));
     }
 }

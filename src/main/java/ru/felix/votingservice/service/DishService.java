@@ -11,8 +11,8 @@ import ru.felix.votingservice.repository.RestaurantRepository;
 import ru.felix.votingservice.util.validation.ValidationUtil;
 
 import java.time.LocalDate;
-import java.util.List;
 
+import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.felix.votingservice.util.validation.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -43,6 +43,7 @@ public class DishService {
     @Transactional
     public void update(int restaurantId, int dishId, Dish dish) {
         Assert.notNull(dish, "dish must not be null");
+        assureIdConsistent(dish, dishId);
         Dish updateDish = getByRestaurant(restaurantId, dishId);
         updateDish.setPrice(dish.getPrice());
         updateDish.setName(dish.getName());

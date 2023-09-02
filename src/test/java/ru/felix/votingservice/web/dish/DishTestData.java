@@ -8,17 +8,31 @@ import java.util.List;
 
 public class DishTestData {
 
-    public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Dish.class, "id");
+    public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Dish.class, "restaurant");
 
-    public static final Dish dish1 = new Dish(1, "Вареный картофель", LocalDate.now(), 70);
-    public static final Dish dish2 = new Dish(2, "Котлета говяжья", LocalDate.now(), 150);
-    public static final Dish dish3 = new Dish(3, "Суп рыбный", LocalDate.now(), 120);
-    public static final Dish dish4 = new Dish(4, "Водка", LocalDate.now(), 200);
+    public static final int DISH1_ID = 1;
 
-    public static final Dish oldDish1 = new Dish(1, "Курица гриль", LocalDate.of(2020, 1, 31), 270);
-    public static final Dish oldDish2 = new Dish(2, "Шаурма", LocalDate.of(2020, 1, 31), 150);
-    public static final Dish oldDish3 = new Dish(3, "Сосиска в тесте", LocalDate.of(2020, 1, 31), 40);
-    public static final Dish oldDish4 = new Dish(4, "Балтика-7", LocalDate.of(2020, 1, 31), 50);
+    public static final int DISH2_ID = 2;
+
+    public static final int DISH3_ID = 3;
+
+    public static final int DISH4_ID = 4;
+
+    public static final Dish dish1 = new Dish(DISH1_ID, "Вареный картофель", LocalDate.now(), 70);
+
+    public static final Dish dish2 = new Dish(DISH2_ID, "Котлета говяжья", LocalDate.now(), 150);
+
+    public static final Dish dish3 = new Dish(DISH3_ID, "Суп рыбный", LocalDate.now(), 120);
+
+    public static final Dish dish4 = new Dish(DISH4_ID, "Водка", LocalDate.now(), 200);
+
+    public static final Dish oldDish1 = new Dish(DISH1_ID, "Курица гриль", LocalDate.of(2020, 1, 31), 270);
+
+    public static final Dish oldDish2 = new Dish(DISH2_ID, "Шаурма", LocalDate.of(2020, 1, 31), 150);
+
+    public static final Dish oldDish3 = new Dish(DISH3_ID, "Сосиска в тесте", LocalDate.of(2020, 1, 31), 40);
+
+    public static final Dish oldDish4 = new Dish(DISH4_ID, "Балтика-7", LocalDate.of(2020, 1, 31), 50);
 
     public static final List<Dish> dishesFromRestaurant1 = List.of(dish1, dish2, dish3, dish4);
 
@@ -29,6 +43,6 @@ public class DishTestData {
     }
 
     public static Dish getUpdated() {
-        return new Dish(dish1.id(), "Обновленное блюдо", dish1.getLocalDate(), 2000);
+        return new Dish(DISH1_ID, "Обновленное блюдо", dish1.getLocalDate(), 2000);
     }
 }

@@ -12,8 +12,6 @@ import ru.felix.votingservice.model.Dish;
 import ru.felix.votingservice.service.DishService;
 
 import java.net.URI;
-import java.time.LocalDate;
-import java.util.List;
 
 import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.felix.votingservice.util.validation.ValidationUtil.checkNew;
@@ -48,6 +46,7 @@ public class AdminDishController {
     }
 
     @DeleteMapping("/{restaurantId}/dish/{dishId}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int restaurantId, @PathVariable int dishId) {
         log.info("delete dish with id - {} from restaurant - {}", dishId, restaurantId);
         service.delete(restaurantId, dishId);

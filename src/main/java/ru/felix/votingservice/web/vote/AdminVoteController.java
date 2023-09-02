@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.felix.votingservice.service.VoteService;
 import ru.felix.votingservice.to.VoteTo;
@@ -30,7 +31,7 @@ public class AdminVoteController {
     }
 
     @GetMapping("/winner-from-date")
-    public int getWinnerFromDate(LocalDate date) {
+    public int getWinnerFromDate(@RequestParam LocalDate date) {
         log.info("get winner restaurant id from date - {}", date);
         return service.getWinnerRestaurantIdFromDate(date);
     }

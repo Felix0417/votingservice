@@ -47,6 +47,6 @@ public class RestaurantService {
     }
 
     public ResponseEntity<Restaurant> getWithDishes(int restaurantId, LocalDate localDate) {
-        return ResponseEntity.of(repository.getWithDishes(restaurantId, localDate));
+        return ResponseEntity.of(repository.getWithDishes(restaurantId, localDate != null ? localDate : LocalDate.now()));
     }
 }

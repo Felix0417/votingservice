@@ -30,10 +30,17 @@ public class ProfileRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     public void getWithDishes() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + restaurant1.id()))
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT1_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_MATCHER_WITH_DISHES.contentJson(restaurant1));
+    }
+
+    @Test
+    public void getNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + NOT_FOUND_RESTAURANT))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }
