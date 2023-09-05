@@ -32,7 +32,6 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(ProfileRestaurantController.REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_MATCHER.contentJson(restaurants));
     }
@@ -119,10 +118,9 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     public void getWithDishesFromDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT1_ID + "/from-date").param("localDate", "2020-01-31"))
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT1_ID + "/from-date").param("date", "2020-01-31"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_MATCHER_WITH_DISHES.contentJson(restaurantWithOldDishes));
     }

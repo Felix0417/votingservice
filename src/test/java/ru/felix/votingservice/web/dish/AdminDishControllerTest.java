@@ -23,7 +23,7 @@ import static ru.felix.votingservice.web.restaurant.RestaurantTestData.NOT_FOUND
 @WithUserDetails(value = UserTestData.ADMIN_MAIL)
 class AdminDishControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL_WITH_RESTAURANT = REST_URL + "/" + RESTAURANT1_ID + "/dish";
+    private static final String REST_URL_WITH_RESTAURANT = REST_URL + "/" + RESTAURANT1_ID + "/dishes";
 
     @Autowired
     private DishRepository repository;
@@ -44,7 +44,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
     @Test
     void createNotFoundRestaurant() throws Exception {
         Dish newDish = DishTestData.getNew();
-        perform(MockMvcRequestBuilders.post(REST_URL + "/" + NOT_FOUND_RESTAURANT + "/dish")
+        perform(MockMvcRequestBuilders.post(REST_URL + "/" + NOT_FOUND_RESTAURANT + "/dishes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
                 .andExpect(status().isNotFound());

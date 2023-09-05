@@ -21,11 +21,11 @@ import static ru.felix.votingservice.util.validation.ValidationUtil.checkNew;
 @Slf4j
 @RequiredArgsConstructor
 public class AdminDishController {
-    static final String REST_URL = "/api/admin/restaurant";
+    static final String REST_URL = "/api/admin/restaurants";
 
     private final DishService service;
 
-    @PostMapping(value = "/{restaurantId}/dish")
+    @PostMapping(value = "/{restaurantId}/dishes")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<Dish> create(@PathVariable int restaurantId, @Valid @RequestBody Dish dish) {
         checkNew(dish);
@@ -37,7 +37,7 @@ public class AdminDishController {
         return ResponseEntity.created(newDishUri).body(newDish);
     }
 
-    @PutMapping(value = "/{restaurantId}/dish/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{restaurantId}/dishes/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable int restaurantId, @PathVariable int dishId, @Valid @RequestBody Dish dish) {
         assureIdConsistent(dish, restaurantId);
@@ -45,7 +45,7 @@ public class AdminDishController {
         service.update(restaurantId, dishId, dish);
     }
 
-    @DeleteMapping("/{restaurantId}/dish/{dishId}")
+    @DeleteMapping("/{restaurantId}/dishes/{dishId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int restaurantId, @PathVariable int dishId) {
         log.info("delete dish with id - {} from restaurant - {}", dishId, restaurantId);

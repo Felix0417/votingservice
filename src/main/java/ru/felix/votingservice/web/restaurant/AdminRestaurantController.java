@@ -23,7 +23,7 @@ import static ru.felix.votingservice.util.validation.ValidationUtil.checkNew;
 @Slf4j
 public class AdminRestaurantController extends AbstractRestaurantController {
 
-    static final String REST_URL = "/api/admin/restaurant";
+    static final String REST_URL = "/api/admin/restaurants";
 
     public AdminRestaurantController(RestaurantService service) {
         super(service);
@@ -58,8 +58,8 @@ public class AdminRestaurantController extends AbstractRestaurantController {
 
     @GetMapping("/{restaurantId}/from-date")
     public Restaurant getWithDishesFromDate(@PathVariable int restaurantId,
-                                            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate localDate) {
+                                            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate date) {
         log.info("get restaurant - {} with menu from current date", restaurantId);
-        return service.getWithDishes(restaurantId, localDate).getBody();
+        return service.getWithDishes(restaurantId, date).getBody();
     }
 }

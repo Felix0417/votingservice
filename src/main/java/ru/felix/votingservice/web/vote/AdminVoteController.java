@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminVoteController {
 
-    static final String REST_URL = "api/admin/vote";
+    static final String REST_URL = "/api/admin/votes";
 
     private final VoteService service;
 

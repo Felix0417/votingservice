@@ -23,9 +23,9 @@ public abstract class AbstractRestaurantController {
         return service.getAll();
     }
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<Restaurant> getWithDishes(@PathVariable int id) {
-        log.info("get restaurant - {} with menu from current date", id);
-        return service.getWithDishes(id, LocalDate.now());
+    @GetMapping(path = "/{restaurantId}")
+    public ResponseEntity<Restaurant> getWithDishes(@PathVariable int restaurantId) {
+        log.info("get restaurant - {} with menu from current date", restaurantId);
+        return service.getWithDishes(restaurantId, LocalDate.now());
     }
 }

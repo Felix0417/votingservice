@@ -21,6 +21,7 @@
         <springdoc.version>2.1.0</springdoc.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <junit-params>5.10.0</junit-params>
     </properties>
 
     <dependencies>
@@ -94,6 +95,13 @@
             <artifactId>junit-platform-launcher</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit-params}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -12,6 +12,6 @@ public class VoteUtils {
     }
 
     public static boolean checkVoteTime(LocalDateTime dateTime) {
-        return dateTime.toLocalTime().isBefore(LocalTime.of(11, 0));
+        return dateTime.toLocalTime().isAfter(LocalTime.of(11, 0));
     }
 }

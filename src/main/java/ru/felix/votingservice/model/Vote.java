@@ -1,6 +1,7 @@
 package ru.felix.votingservice.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -21,6 +22,7 @@ public class Vote extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private User user;
 
     @Column(name = "voting_date", nullable = false)

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.felix.votingservice.error.IllegalRequestDataException;
 import ru.felix.votingservice.model.Restaurant;
 import ru.felix.votingservice.model.User;
 import ru.felix.votingservice.model.Vote;
@@ -16,6 +17,7 @@ import ru.felix.votingservice.util.validation.ValidationUtil;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,29 +35,27 @@ public class VoteService {
     }
 
     public Vote get(int id) {
-        return ValidationUtil.checkNotFoundWithId(voteRepository.getByIdOnCurrentDate(id, LocalDate.now()), id);
+        return ValidationUtil.checkNotFoundWithId(getFromToday(id).orElse(null), id);
     }
 
     @Transactional
-    public void create(int userId, int restaurantId) {
-        LocalDateTime dateTime = LocalDateTime.now();
-        if (VoteUtils.checkVoteTime(dateTime)) {
-            Vote vote = new Vote(getUser(userId), dateTime.toLocalDate(), getRestaurant(restaurantId));
-            voteRepository.save(vote);
+    public Vote create(int userId, int restaurantId) {
+        if (getFromToday(userId).isPresent()) {
+            throw new IllegalRequestDataException("You already have vote on this day! Please try it tomorrow!");
         }
-        // todo throw ex
+        Vote vote = new Vote(getUser(userId), LocalDate.now(), getRestaurant(restaurantId));
+        return voteRepository.save(vote);
     }
 
     @Transactional
     public void update(int userId, int restaurantId) {
         Vote vote = get(userId);
         Assert.notNull(vote, "vote must not be null");
-        LocalDateTime dateTime = LocalDateTime.now();
-        if (VoteUtils.checkVoteTime(dateTime)) {
-            vote.setRestaurant(getRestaurant(restaurantId));
-            ValidationUtil.checkNotFoundWithId(voteRepository.save(vote), vote.id());
+        if (VoteUtils.checkVoteTime(LocalDateTime.now())) {
+            throw new IllegalRequestDataException("Your vote is not registered, because you can do it before 11 a.m.");
         }
-        // todo throw ex
+        vote.setRestaurant(getRestaurant(restaurantId));
+        ValidationUtil.checkNotFoundWithId(voteRepository.save(vote), vote.id());
     }
 
     public int getWinnerRestaurantIdFromDate(LocalDate date) {
@@ -78,5 +78,9 @@ public class VoteService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
         Assert.notNull(restaurant, "restaurant must not be null");
         return restaurant;
+    }
+
+    private Optional<Vote> getFromToday(int userId) {
+        return voteRepository.getByIdOnCurrentDate(userId, LocalDate.now());
     }
 }
