@@ -7,7 +7,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "dish")
+@Table(name = "dish", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "of_date"}))
 @Getter
 @Setter
 @ToString

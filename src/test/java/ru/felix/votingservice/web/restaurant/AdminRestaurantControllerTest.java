@@ -68,6 +68,20 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createDuplicate() throws Exception {
+        Restaurant newRestaurant = RestaurantTestData.getNew();
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newRestaurant)))
+                .andExpect(status().isCreated());
+
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newRestaurant)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
     void wrongCreate() throws Exception {
         Restaurant created = RestaurantTestData.getNew();
         perform(MockMvcRequestBuilders.post(REST_URL_SLASH + RESTAURANT2_ID)
@@ -87,6 +101,21 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         RESTAURANT_MATCHER.assertMatch(repository.getExisted(RESTAURANT1_ID), updated);
+    }
+
+    @Test
+    void updateDuplicate() throws Exception {
+        Restaurant updated = RestaurantTestData.getUpdated();
+        updated.setName(restaurant2.getName());
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        perform(MockMvcRequestBuilders.get(ProfileRestaurantController.REST_URL))
+                .andExpect(status().isConflict())
+                .andDo(print());
     }
 
     @Test

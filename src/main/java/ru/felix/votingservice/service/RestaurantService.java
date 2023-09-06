@@ -24,7 +24,7 @@ public class RestaurantService {
     private final RestaurantRepository repository;
 
     public List<Restaurant> getAll() {
-        return repository.findAll();
+        return repository.getAll();
     }
 
     public Restaurant get(int id) {

@@ -43,6 +43,20 @@ class AdminDishControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createDuplicate() throws Exception {
+        Dish newDish = DishTestData.getNew();
+        perform(MockMvcRequestBuilders.post(REST_URL_WITH_RESTAURANT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)))
+                .andExpect(status().isCreated());
+
+        perform(MockMvcRequestBuilders.post(REST_URL_WITH_RESTAURANT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
     void createNotFoundRestaurant() throws Exception {
         Dish newDish = DishTestData.getNew();
         perform(MockMvcRequestBuilders.post(REST_URL + "/" + NOT_FOUND_RESTAURANT_ID + "/dishes")

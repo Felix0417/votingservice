@@ -10,17 +10,15 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "vote")
+@Table(name = "vote", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "voting_date"}))
 @Getter
 @Setter
 @ToString
-//@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Vote extends BaseEntity implements Serializable {
 
     @JoinColumn(name = "user_id", nullable = false)
-//    @ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
@@ -30,11 +28,8 @@ public class Vote extends BaseEntity implements Serializable {
     private LocalDate localDate;
 
     @JoinColumn(name = "restaurant_id", nullable = false)
-//    @ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JsonBackReference
-//    @JsonIgnore
     private Restaurant restaurant;
 
     public Vote(Integer id, User user, LocalDate localDate, Restaurant restaurant) {

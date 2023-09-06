@@ -10,9 +10,8 @@ import org.springframework.lang.Nullable;
 import java.io.Serializable;
 import java.util.List;
 
-
 @Entity
-@Table(name = "restaurant")
+@Table(name = "restaurant", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,6 +29,7 @@ public class Restaurant extends NamedEntity implements Serializable {
 
     public Restaurant(Restaurant restaurant) {
         this(restaurant.id, restaurant.name);
+        this.dishes = restaurant.dishes;
     }
 
     @Override
