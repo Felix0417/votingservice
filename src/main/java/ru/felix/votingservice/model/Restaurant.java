@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.lang.Nullable;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -14,10 +15,8 @@ import java.util.List;
 @Table(name = "restaurant")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = false)
-public class Restaurant extends NamedEntity {
+public class Restaurant extends NamedEntity implements Serializable {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -31,5 +30,13 @@ public class Restaurant extends NamedEntity {
 
     public Restaurant(Restaurant restaurant) {
         this(restaurant.id, restaurant.name);
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                '}';
     }
 }

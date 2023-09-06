@@ -36,6 +36,7 @@ public class UserService {
         return ValidationUtil.checkNotFoundWithId(repository.save(user), user.id());
     }
 
+    @Transactional
     public void delete(int id) {
         ValidationUtil.checkNotFoundWithId(repository.delete(id), id);
     }

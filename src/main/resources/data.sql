@@ -16,8 +16,6 @@ VALUES ('Яръ'), -- 1
        ('Мимино'), -- 4
        ('Чайхана'); -- 5
 
-
-
 INSERT INTO DISH (name, restaurant_id, of_date, price)
 VALUES ('Вареный картофель', 1, CURRENT_DATE, 70),
        ('Котлета говяжья', 1, CURRENT_DATE, 150),
@@ -50,8 +48,8 @@ VALUES ('Вареный картофель', 1, CURRENT_DATE, 70),
        ('Сосиска в тесте', 1, '2020-01-31', 40),
        ('Балтика-7', 1, '2020-01-31', 50);
 
-INSERT INTO VOTE (VOTING_DATE, RESTAURANT_ID, USER_ID)
-VALUES (CURRENT_DATE, 1, 1),
-       (CURRENT_DATE, 1, 2),
-       (CURRENT_DATE, 2, 3),
-       ('2020-01-31', 2, 1);
+INSERT INTO VOTE (USER_ID, VOTING_DATE, RESTAURANT_ID)
+VALUES (1, CURRENT_DATE, 1),
+       (2, CURRENT_DATE, 1),
+       (3, CURRENT_DATE, 2),
+       (1, '2020-01-31', 2);

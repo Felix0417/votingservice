@@ -1,8 +1,7 @@
-package ru.felix.votingservice.web.restaurant;
+package ru.felix.votingservice.testdata;
 
 import ru.felix.votingservice.model.Restaurant;
 import ru.felix.votingservice.web.MatcherFactory;
-import ru.felix.votingservice.web.dish.DishTestData;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class RestaurantTestData {
 
     public static int FIFTH_RESTAURANT_ID = 5;
 
-    public static int NOT_FOUND_RESTAURANT = Integer.MAX_VALUE;
+    public static int NOT_FOUND_RESTAURANT_ID = Integer.MAX_VALUE;
 
     public static final Restaurant restaurant1 = new Restaurant(RESTAURANT1_ID, "Яръ");
 
@@ -49,6 +48,7 @@ public class RestaurantTestData {
 
     static {
         restaurant1.setDishes(DishTestData.dishesFromRestaurant1);
+        restaurant2.setDishes(DishTestData.dishesFromRestaurant2);
         restaurantWithOldDishes.setDishes(DishTestData.oldDishesFromRestaurant1);
     }
 

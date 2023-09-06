@@ -8,17 +8,18 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.felix.votingservice.model.Dish;
 import ru.felix.votingservice.repository.DishRepository;
+import ru.felix.votingservice.testdata.DishTestData;
 import ru.felix.votingservice.util.JsonUtil;
 import ru.felix.votingservice.web.AbstractControllerTest;
-import ru.felix.votingservice.web.user.UserTestData;
+import ru.felix.votingservice.testdata.UserTestData;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.felix.votingservice.web.dish.AdminDishController.REST_URL;
-import static ru.felix.votingservice.web.dish.DishTestData.*;
-import static ru.felix.votingservice.web.restaurant.RestaurantTestData.RESTAURANT1_ID;
-import static ru.felix.votingservice.web.restaurant.RestaurantTestData.NOT_FOUND_RESTAURANT;
+import static ru.felix.votingservice.testdata.DishTestData.*;
+import static ru.felix.votingservice.testdata.RestaurantTestData.RESTAURANT1_ID;
+import static ru.felix.votingservice.testdata.RestaurantTestData.NOT_FOUND_RESTAURANT_ID;
 
 @WithUserDetails(value = UserTestData.ADMIN_MAIL)
 class AdminDishControllerTest extends AbstractControllerTest {
@@ -44,7 +45,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
     @Test
     void createNotFoundRestaurant() throws Exception {
         Dish newDish = DishTestData.getNew();
-        perform(MockMvcRequestBuilders.post(REST_URL + "/" + NOT_FOUND_RESTAURANT + "/dishes")
+        perform(MockMvcRequestBuilders.post(REST_URL + "/" + NOT_FOUND_RESTAURANT_ID + "/dishes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
                 .andExpect(status().isNotFound());

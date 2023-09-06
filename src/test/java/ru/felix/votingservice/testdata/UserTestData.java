@@ -1,4 +1,4 @@
-package ru.felix.votingservice.web.user;
+package ru.felix.votingservice.testdata;
 
 import ru.felix.votingservice.web.MatcherFactory;
 import ru.felix.votingservice.model.Role;

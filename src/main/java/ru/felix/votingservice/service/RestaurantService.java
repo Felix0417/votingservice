@@ -14,6 +14,8 @@ import ru.felix.votingservice.util.validation.ValidationUtil;
 import java.time.LocalDate;
 import java.util.List;
 
+import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -37,13 +39,14 @@ public class RestaurantService {
 
     @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Restaurant update(Restaurant restaurant) {
+    public Restaurant update(int restaurantId, Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
+        assureIdConsistent(restaurant, restaurantId);
         return ValidationUtil.checkNotFoundWithId(repository.save(restaurant), restaurant.id());
     }
 
     public void delete(int id) {
-        ValidationUtil.checkNotFoundWithId(repository.delete(id), id);
+        ValidationUtil.checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
     public ResponseEntity<Restaurant> getWithDishes(int restaurantId, LocalDate localDate) {

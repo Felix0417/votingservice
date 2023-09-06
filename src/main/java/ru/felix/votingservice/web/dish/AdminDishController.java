@@ -13,7 +13,6 @@ import ru.felix.votingservice.service.DishService;
 
 import java.net.URI;
 
-import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.felix.votingservice.util.validation.ValidationUtil.checkNew;
 
 @RestController
@@ -40,7 +39,6 @@ public class AdminDishController {
     @PutMapping(value = "/{restaurantId}/dishes/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable int restaurantId, @PathVariable int dishId, @Valid @RequestBody Dish dish) {
-        assureIdConsistent(dish, restaurantId);
         log.info("update dish - {} with id - {} from restaurant - {}", dish, dishId, restaurantId);
         service.update(restaurantId, dishId, dish);
     }

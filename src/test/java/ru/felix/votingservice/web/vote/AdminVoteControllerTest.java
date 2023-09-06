@@ -4,15 +4,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.felix.votingservice.testdata.VoteTestData;
 import ru.felix.votingservice.web.AbstractControllerTest;
-import ru.felix.votingservice.web.user.UserTestData;
+import ru.felix.votingservice.testdata.UserTestData;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.felix.votingservice.web.restaurant.RestaurantTestData.RESTAURANT1_ID;
-import static ru.felix.votingservice.web.restaurant.RestaurantTestData.RESTAURANT2_ID;
+import static ru.felix.votingservice.testdata.RestaurantTestData.RESTAURANT1_ID;
+import static ru.felix.votingservice.testdata.RestaurantTestData.RESTAURANT2_ID;
 import static ru.felix.votingservice.web.vote.AdminVoteController.REST_URL;
-import static ru.felix.votingservice.web.vote.VoteTestData.VOTE_TO_MATCHER;
+import static ru.felix.votingservice.testdata.VoteTestData.VOTE_TO_MATCHER;
 
 @WithUserDetails(value = UserTestData.ADMIN_MAIL)
 class AdminVoteControllerTest extends AbstractControllerTest {

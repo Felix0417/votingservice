@@ -8,16 +8,17 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.felix.votingservice.model.Restaurant;
 import ru.felix.votingservice.repository.RestaurantRepository;
+import ru.felix.votingservice.testdata.RestaurantTestData;
 import ru.felix.votingservice.util.JsonUtil;
 import ru.felix.votingservice.web.AbstractControllerTest;
-import ru.felix.votingservice.web.user.UserTestData;
+import ru.felix.votingservice.testdata.UserTestData;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.felix.votingservice.web.restaurant.AdminRestaurantController.REST_URL;
-import static ru.felix.votingservice.web.restaurant.RestaurantTestData.*;
+import static ru.felix.votingservice.testdata.RestaurantTestData.*;
 
 @WithUserDetails(value = UserTestData.ADMIN_MAIL)
 class AdminRestaurantControllerTest extends AbstractControllerTest {
@@ -47,7 +48,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     public void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + NOT_FOUND_RESTAURANT))
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + NOT_FOUND_RESTAURANT_ID))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

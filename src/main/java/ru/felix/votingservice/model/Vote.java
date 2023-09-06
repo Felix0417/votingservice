@@ -1,12 +1,12 @@
 package ru.felix.votingservice.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
@@ -14,13 +14,14 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(callSuper = false)
+//@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Vote extends BaseEntity {
+public class Vote extends BaseEntity implements Serializable {
 
     @JoinColumn(name = "user_id", nullable = false)
-    @ManyToOne(fetch = FetchType.EAGER)
+//    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
@@ -29,8 +30,21 @@ public class Vote extends BaseEntity {
     private LocalDate localDate;
 
     @JoinColumn(name = "restaurant_id", nullable = false)
-    @ManyToOne(fetch = FetchType.EAGER)
+//    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
+//    @JsonBackReference
+//    @JsonIgnore
     private Restaurant restaurant;
+
+    public Vote(Integer id, User user, LocalDate localDate, Restaurant restaurant) {
+        super(id);
+        this.user = user;
+        this.localDate = localDate;
+        this.restaurant = restaurant;
+    }
+
+    public Vote(Vote vote) {
+        this(vote.id, vote.user, vote.localDate, vote.restaurant);
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.felix.votingservice.testdata.UserTestData;
 import ru.felix.votingservice.web.AbstractControllerTest;
 import ru.felix.votingservice.model.User;
 import ru.felix.votingservice.repository.UserRepository;

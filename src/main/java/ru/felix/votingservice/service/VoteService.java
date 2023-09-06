@@ -49,11 +49,11 @@ public class VoteService {
 
     @Transactional
     public void update(int userId, int restaurantId) {
+        if (VoteUtils.checkVoteTime(LocalDateTime.now())) {
+            throw new IllegalRequestDataException("Your vote is not updated, because you can do it until 11 a.m.");
+        }
         Vote vote = get(userId);
         Assert.notNull(vote, "vote must not be null");
-        if (VoteUtils.checkVoteTime(LocalDateTime.now())) {
-            throw new IllegalRequestDataException("Your vote is not registered, because you can do it before 11 a.m.");
-        }
         vote.setRestaurant(getRestaurant(restaurantId));
         ValidationUtil.checkNotFoundWithId(voteRepository.save(vote), vote.id());
     }
@@ -68,13 +68,13 @@ public class VoteService {
         voteRepository.delete(get(userId));
     }
 
-    public User getUser(int userId) {
+    private User getUser(int userId) {
         User user = userRepository.findById(userId).orElse(null);
         Assert.notNull(user, "user must not be null");
         return user;
     }
 
-    public Restaurant getRestaurant(int restaurantId) {
+    private Restaurant getRestaurant(int restaurantId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
         Assert.notNull(restaurant, "restaurant must not be null");
         return restaurant;

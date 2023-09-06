@@ -10,21 +10,21 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.felix.votingservice.repository.VoteRepository;
 import ru.felix.votingservice.service.VoteService;
+import ru.felix.votingservice.testdata.UserTestData;
+import ru.felix.votingservice.testdata.VoteTestData;
 import ru.felix.votingservice.to.VoteTo;
 import ru.felix.votingservice.util.JsonUtil;
 import ru.felix.votingservice.util.VoteUtils;
 import ru.felix.votingservice.web.AbstractControllerTest;
-import ru.felix.votingservice.web.user.UserTestData;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.felix.votingservice.web.restaurant.RestaurantTestData.RESTAURANT1_ID;
+import static ru.felix.votingservice.testdata.RestaurantTestData.RESTAURANT1_ID;
+import static ru.felix.votingservice.testdata.VoteTestData.*;
 import static ru.felix.votingservice.web.vote.ProfileVoteController.REST_URL;
-import static ru.felix.votingservice.web.vote.VoteTestData.*;
 
 @WithUserDetails(value = UserTestData.USER_MAIL)
 class ProfileVoteControllerTest extends AbstractControllerTest {
@@ -46,7 +46,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     @Test
     void create() throws Exception {
         service.deleteFromCurrentDate(UserTestData.USER_ID);
-        VoteTo newVoteTo = VoteTestData.getNew();
+        VoteTo newVoteTo = VoteTestData.getNewTo();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newVoteTo)));
@@ -58,7 +58,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
 
     @Test
     void createDuplicate() throws Exception {
-        VoteTo newVoteTo = VoteTestData.getNew();
+        VoteTo newVoteTo = VoteTestData.getNewTo();
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newVoteTo)))
@@ -67,11 +67,10 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.detail").value(ERR_MSG_DUPLICATE));
     }
 
-
     @Test
-    @EnabledIf("isBeforeEleven")
+    @EnabledIf("ru.felix.votingservice.testdata.VoteTestData#isBeforeEleven")
     void update() throws Exception {
-        VoteTo updated = VoteTestData.updated();
+        VoteTo updated = VoteTestData.updatedTo();
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
@@ -82,9 +81,9 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @DisabledIf("isBeforeEleven")
+    @DisabledIf("ru.felix.votingservice.testdata.VoteTestData#isBeforeEleven")
     void wrongUpdate() throws Exception {
-        VoteTo updated = VoteTestData.updated();
+        VoteTo updated = VoteTestData.updatedTo();
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
@@ -98,10 +97,6 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_URL))
                 .andExpect(status().isNoContent());
 
-        assertFalse(repository.getByIdOnCurrentDate(userVote.getUserId(), LocalDate.now()).isPresent());
-    }
-
-    boolean isBeforeEleven() {
-        return LocalTime.now().isBefore(LocalTime.of(11, 0));
+        assertFalse(repository.getByIdOnCurrentDate(userVoteTo.getUserId(), LocalDate.now()).isPresent());
     }
 }

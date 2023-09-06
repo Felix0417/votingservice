@@ -24,9 +24,8 @@ public class DishService {
 
     private final RestaurantRepository restaurantRepository;
 
-
     public Dish getByRestaurant(int restaurantId, int dishId) {
-        return checkNotFoundWithId(dishRepository.findByRestaurantIdAndId(restaurantId, dishId), dishId);
+        return checkNotFoundWithId(dishRepository.findByRestaurantIdAndId(restaurantId, dishId).orElse(null), dishId);
     }
 
     @Transactional
@@ -51,6 +50,6 @@ public class DishService {
     }
 
     public void delete(int restaurantId, int dishId) {
-        checkNotFoundWithId(dishRepository.deleteByRestaurantIdAndId(restaurantId, dishId), dishId);
+        checkNotFoundWithId(dishRepository.deleteByRestaurantIdAndId(restaurantId, dishId) != 0, dishId);
     }
 }

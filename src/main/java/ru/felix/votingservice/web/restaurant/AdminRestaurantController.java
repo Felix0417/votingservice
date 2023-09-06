@@ -15,7 +15,6 @@ import ru.felix.votingservice.service.RestaurantService;
 import java.net.URI;
 import java.time.LocalDate;
 
-import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.felix.votingservice.util.validation.ValidationUtil.checkNew;
 
 @RestController
@@ -28,7 +27,6 @@ public class AdminRestaurantController extends AbstractRestaurantController {
     public AdminRestaurantController(RestaurantService service) {
         super(service);
     }
-
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
@@ -45,8 +43,7 @@ public class AdminRestaurantController extends AbstractRestaurantController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int restaurantId) {
         log.info("update restaurant - {}", restaurant);
-        assureIdConsistent(restaurant, restaurantId);
-        service.update(restaurant);
+        service.update(restaurantId, restaurant);
     }
 
     @DeleteMapping("/{restaurantId}")

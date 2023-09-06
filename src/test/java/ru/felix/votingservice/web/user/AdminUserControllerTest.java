@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.felix.votingservice.testdata.UserTestData;
 import ru.felix.votingservice.web.AbstractControllerTest;
 import ru.felix.votingservice.model.Role;
 import ru.felix.votingservice.model.User;
