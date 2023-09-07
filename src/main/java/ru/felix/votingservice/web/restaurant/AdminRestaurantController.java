@@ -32,7 +32,7 @@ public class AdminRestaurantController extends AbstractRestaurantController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
         checkNew(restaurant);
-        log.info("create new restaurant - {}", restaurant);
+        log.info("create new restaurant - {}", restaurant.getName());
         Restaurant newRestaurant = service.create(restaurant);
         URI restaurantUri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path(REST_URL + "/{id}").buildAndExpand(newRestaurant.id()).toUri();
@@ -42,7 +42,7 @@ public class AdminRestaurantController extends AbstractRestaurantController {
     @PutMapping("/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int restaurantId) {
-        log.info("update restaurant - {}", restaurant);
+        log.info("update restaurant - {}", restaurant.getName());
         service.update(restaurantId, restaurant);
     }
 
@@ -56,7 +56,7 @@ public class AdminRestaurantController extends AbstractRestaurantController {
     @GetMapping("/{restaurantId}/from-date")
     public Restaurant getWithDishesFromDate(@PathVariable int restaurantId,
                                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate date) {
-        log.info("get restaurant - {} with menu from current date", restaurantId);
+        log.info("get restaurant - {} with menu from date - {}", restaurantId, date);
         return service.getWithDishes(restaurantId, date).getBody();
     }
 }

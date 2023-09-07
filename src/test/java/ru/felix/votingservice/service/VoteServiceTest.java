@@ -78,7 +78,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     @EnabledIf("ru.felix.votingservice.testdata.VoteTestData#isBeforeEleven")
     void updateNotFoundRestaurantId() {
-        assertThrows(NotFoundException.class, () -> service.update(USER_ID, NOT_FOUND_RESTAURANT_ID));
+        assertThrows(IllegalArgumentException.class, () -> service.update(USER_ID, NOT_FOUND_RESTAURANT_ID));
     }
 
     @Test

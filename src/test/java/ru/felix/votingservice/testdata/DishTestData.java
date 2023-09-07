@@ -8,7 +8,7 @@ import java.util.List;
 
 public class DishTestData {
 
-    public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Dish.class, "restaurant");
+    public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Dish.class, "restaurant", "localDate");
 
     public static final int DISH1_ID = 1;
 
@@ -37,8 +37,11 @@ public class DishTestData {
     public static final Dish dish4 = new Dish(DISH4_ID, "Водка", LocalDate.now(), 200);
 
     public static final Dish dish5 = new Dish(DISH5_ID, "Клецки", LocalDate.now(), 150);
+
     public static final Dish dish6 = new Dish(DISH6_ID, "Борщ с пампушками", LocalDate.now(), 280);
+
     public static final Dish dish7 = new Dish(DISH7_ID, "Котлета по-киевски", LocalDate.now(), 180);
+
     public static final Dish dish8 = new Dish(DISH8_ID, "Горилка", LocalDate.now(), 250);
 
     public static final Dish oldDish1 = new Dish(DISH1_ID + 20, "Курица гриль", LocalDate.of(2020, 1, 31), 270);

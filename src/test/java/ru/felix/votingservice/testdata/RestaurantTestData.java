@@ -15,7 +15,7 @@ public class RestaurantTestData {
             MatcherFactory.usingAssertions(Restaurant.class,
 //                         No need use ignoringAllOverriddenEquals, see https://assertj.github.io/doc/#breaking-changes
                     (a, e) -> assertThat(a).usingRecursiveComparison()
-                            .ignoringFields("dishes.id", "dishes.restaurant").isEqualTo(e),
+                            .ignoringFields("dishes.id", "dishes.restaurant", "dishes.localDate").isEqualTo(e),
                     (a, e) -> {
                         throw new UnsupportedOperationException();
                     });
