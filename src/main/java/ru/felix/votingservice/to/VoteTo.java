@@ -22,8 +22,6 @@ public class VoteTo {
     private LocalDate localDate;
 
     public VoteTo(VoteTo voteTo) {
-        this.userId = voteTo.userId;
-        this.restaurantId = voteTo.restaurantId;
-        this.localDate = voteTo.getLocalDate();
+        this(voteTo.userId, voteTo.restaurantId, voteTo.getLocalDate());
     }
 }

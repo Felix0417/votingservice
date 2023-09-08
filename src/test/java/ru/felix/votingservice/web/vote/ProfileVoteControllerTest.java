@@ -97,6 +97,6 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_URL))
                 .andExpect(status().isNoContent());
 
-        assertFalse(repository.getByIdOnCurrentDate(userVoteTo.getUserId(), LocalDate.now()).isPresent());
+        assertFalse(repository.getByIdOnCurrentDate(userVoteTo.getUserId()).isPresent());
     }
 }

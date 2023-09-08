@@ -29,7 +29,6 @@ public class AdminRestaurantController extends AbstractRestaurantController {
     }
 
     @PostMapping
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
         checkNew(restaurant);
         log.info("create new restaurant - {}", restaurant.getName());

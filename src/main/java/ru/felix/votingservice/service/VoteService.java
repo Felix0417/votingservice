@@ -5,11 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.felix.votingservice.error.IllegalRequestDataException;
-import ru.felix.votingservice.model.Restaurant;
-import ru.felix.votingservice.model.User;
 import ru.felix.votingservice.model.Vote;
-import ru.felix.votingservice.repository.RestaurantRepository;
-import ru.felix.votingservice.repository.UserRepository;
 import ru.felix.votingservice.repository.VoteRepository;
 import ru.felix.votingservice.util.VoteUtils;
 import ru.felix.votingservice.util.validation.ValidationUtil;
@@ -26,9 +22,9 @@ public class VoteService {
 
     private final VoteRepository voteRepository;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantService;
 
     public List<Vote> getAll() {
         return voteRepository.findAll();
@@ -38,12 +34,16 @@ public class VoteService {
         return ValidationUtil.checkNotFoundWithId(getFromToday(id).orElse(null), id);
     }
 
+    public int getRestaurantId(int userId){
+        return get(userId).getRestaurant().id();
+    }
+
     @Transactional
     public Vote create(int userId, int restaurantId) {
         if (getFromToday(userId).isPresent()) {
             throw new IllegalRequestDataException("You already have vote on this day! Please try it tomorrow!");
         }
-        Vote vote = new Vote(getUser(userId), LocalDate.now(), getRestaurant(restaurantId));
+        Vote vote = new Vote(userService.get(userId), LocalDate.now(), restaurantService.get(restaurantId));
         return voteRepository.save(vote);
     }
 
@@ -54,7 +54,7 @@ public class VoteService {
         }
         Vote vote = get(userId);
         Assert.notNull(vote, "vote must not be null");
-        vote.setRestaurant(getRestaurant(restaurantId));
+        vote.setRestaurant(restaurantService.get(restaurantId));
         ValidationUtil.checkNotFoundWithId(voteRepository.save(vote), vote.id());
     }
 
@@ -68,19 +68,7 @@ public class VoteService {
         voteRepository.delete(get(userId));
     }
 
-    private User getUser(int userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        Assert.notNull(user, "user must not be null");
-        return user;
-    }
-
-    private Restaurant getRestaurant(int restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        Assert.notNull(restaurant, "restaurant must not be null");
-        return restaurant;
-    }
-
     private Optional<Vote> getFromToday(int userId) {
-        return voteRepository.getByIdOnCurrentDate(userId, LocalDate.now());
+        return voteRepository.getByIdOnCurrentDate(userId);
     }
 }

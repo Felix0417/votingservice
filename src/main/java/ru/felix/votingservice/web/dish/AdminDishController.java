@@ -25,7 +25,6 @@ public class AdminDishController {
     private final DishService service;
 
     @PostMapping(value = "/{restaurantId}/dishes")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public ResponseEntity<Dish> create(@PathVariable int restaurantId, @Valid @RequestBody Dish dish) {
         checkNew(dish);
         log.info("create new Dish - {}", dish);

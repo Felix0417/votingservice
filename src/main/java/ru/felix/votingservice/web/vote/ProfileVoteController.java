@@ -26,11 +26,11 @@ public class ProfileVoteController {
     public int get() {
         int userId = AuthUser.authId();
         log.info("get Vote by id - {}", userId);
-        return service.get(userId).getRestaurant().id();
+        return service.getRestaurantId(userId);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<VoteTo> create(@AuthenticationPrincipal AuthUser user, @RequestBody VoteTo voteTo) {
         log.info("saving new vote from user - {} and restaurant - {}", user, voteTo.getRestaurantId());
         VoteTo newVoteto = VoteUtils.getTo(service.create(user.id(), voteTo.getRestaurantId()));
