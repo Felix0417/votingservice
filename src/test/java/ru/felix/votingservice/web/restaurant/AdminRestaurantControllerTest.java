@@ -159,9 +159,6 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     public void getWitDishesWithEmptyDate() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT1_ID + "/from-date")
                 .param("localDate", ""))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER_WITH_DISHES.contentJson(restaurant1));
+                .andExpect(status().isNotFound());
     }
 }

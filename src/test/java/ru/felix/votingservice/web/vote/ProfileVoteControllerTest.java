@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.felix.votingservice.testdata.RestaurantTestData.RESTAURANT1_ID;
 import static ru.felix.votingservice.testdata.VoteTestData.*;
 import static ru.felix.votingservice.web.vote.ProfileVoteController.REST_URL;
 
@@ -40,7 +39,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(content().string(String.valueOf(RESTAURANT1_ID)));
+                .andExpect(VOTE_MATCHER.contentJson(userVote));
     }
 
     @Test

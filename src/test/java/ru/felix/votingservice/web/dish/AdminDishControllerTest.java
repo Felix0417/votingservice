@@ -13,8 +13,12 @@ import ru.felix.votingservice.util.JsonUtil;
 import ru.felix.votingservice.web.AbstractControllerTest;
 import ru.felix.votingservice.testdata.UserTestData;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.felix.votingservice.web.dish.AdminDishController.REST_URL;
 import static ru.felix.votingservice.testdata.DishTestData.*;
@@ -30,6 +34,30 @@ class AdminDishControllerTest extends AbstractControllerTest {
     private DishRepository repository;
 
     @Test
+    void getAllFromRestaurantAndDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_WITH_RESTAURANT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("localDate", "2020-01-31"))
+                .andExpect(status().isOk())
+                .andExpect(DISH_MATCHER.contentJson(oldDishesFromRestaurant1));
+    }
+
+    @Test
+    void getByRestaurant() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_WITH_RESTAURANT + "/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(DISH_MATCHER.contentJson(dish1));
+    }
+
+    @Test
+    void getByWrongRestaurant() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_WITH_RESTAURANT + "/" + NOT_FOUND_RESTAURANT_ID)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void create() throws Exception {
         Dish newDish = DishTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL_WITH_RESTAURANT)
@@ -40,6 +68,31 @@ class AdminDishControllerTest extends AbstractControllerTest {
         newDish.setId(newDishId);
         DISH_MATCHER.assertMatch(created, newDish);
         DISH_MATCHER.assertMatch(repository.getExisted(newDishId), newDish);
+    }
+
+    @Test
+    void createFutureDate() throws Exception {
+        Dish newDish = DishTestData.getNew();
+        newDish.setLocalDate(LocalDate.now().plus(2, ChronoUnit.DAYS));
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL_WITH_RESTAURANT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)));
+        Dish created = DISH_MATCHER.readFromJson(action);
+        int newDishId = created.id();
+        newDish.setId(newDishId);
+        DISH_MATCHER.assertMatch(created, newDish);
+        DISH_MATCHER.assertMatch(repository.getExisted(newDishId), newDish);
+    }
+
+    @Test
+    void createLastDate() throws Exception {
+        Dish newDish = DishTestData.getNew();
+        newDish.setLocalDate(LocalDate.now().minus(2, ChronoUnit.DAYS));
+        perform(MockMvcRequestBuilders.post(REST_URL_WITH_RESTAURANT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.detail").value(INVALID_DATE_OF_CREATE_DISH));
     }
 
     @Test

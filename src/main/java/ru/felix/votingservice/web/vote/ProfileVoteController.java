@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import ru.felix.votingservice.model.Vote;
 import ru.felix.votingservice.service.VoteService;
 import ru.felix.votingservice.to.VoteTo;
 import ru.felix.votingservice.util.VoteUtils;
@@ -20,15 +21,15 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class ProfileVoteController {
 
-    static final String REST_URL = "/api/profile/votes";
+    static final String REST_URL = "/api/profile/vote";
 
     private final VoteService service;
 
     @GetMapping
-    public int get() {
+    public Vote get() {
         int userId = AuthUser.authId();
         log.info("get Vote by id - {}", userId);
-        return service.getRestaurantId(userId);
+        return service.get(userId);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

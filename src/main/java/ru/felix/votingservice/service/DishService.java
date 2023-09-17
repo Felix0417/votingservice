@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.felix.votingservice.error.IllegalRequestDataException;
 import ru.felix.votingservice.model.Dish;
 import ru.felix.votingservice.model.Restaurant;
 import ru.felix.votingservice.repository.DishRepository;
@@ -11,6 +12,8 @@ import ru.felix.votingservice.repository.RestaurantRepository;
 import ru.felix.votingservice.util.validation.ValidationUtil;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.felix.votingservice.util.validation.ValidationUtil.checkNotFoundWithId;
@@ -28,14 +31,21 @@ public class DishService {
         return checkNotFoundWithId(dishRepository.findByRestaurantIdAndId(restaurantId, dishId).orElse(null), dishId);
     }
 
+    public List<Dish> getAllByRestaurantFromDate(int restaurantId, LocalDate localDate) {
+        return dishRepository.getAllByRestaurantFromDate(restaurantId, localDate);
+    }
+
     @Transactional
     public Dish create(int restaurantId, Dish dish) {
         Assert.notNull(dish, "dish must not be null");
+        if (dish.getLocalDate().isBefore(LocalDate.now())) {
+            throw new IllegalRequestDataException("Sorry, your dish must be on today or in future days");
+        }
         Restaurant restaurant =
                 ValidationUtil.checkNotFoundWithId(restaurantRepository.findById(restaurantId)
                         .orElse(null), restaurantId);
         dish.setRestaurant(restaurant);
-        dish.setLocalDate(LocalDate.now());
+        dish.setLocalDate(dish.getLocalDate());
         return dishRepository.save(dish);
     }
 
@@ -52,4 +62,5 @@ public class DishService {
     public void delete(int restaurantId, int dishId) {
         checkNotFoundWithId(dishRepository.deleteByRestaurantIdAndId(restaurantId, dishId) != 0, dishId);
     }
+
 }

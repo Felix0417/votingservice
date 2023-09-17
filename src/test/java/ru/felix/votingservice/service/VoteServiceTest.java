@@ -23,11 +23,6 @@ class VoteServiceTest extends AbstractServiceTest {
     private VoteService service;
 
     @Test
-    void getAll() {
-        VOTE_MATCHER.assertMatch(service.getAll(), VoteTestData.getAll());
-    }
-
-    @Test
     void get() {
         VOTE_MATCHER.assertMatch(service.get(VoteTestData.VOTE1_ID), userVote);
     }

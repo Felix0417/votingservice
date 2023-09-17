@@ -11,9 +11,7 @@ import ru.felix.votingservice.util.VoteUtils;
 import ru.felix.votingservice.util.validation.ValidationUtil;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,16 +25,8 @@ public class VoteService {
 
     private final RestaurantService restaurantService;
 
-    public List<Vote> getAll() {
-        return voteRepository.findAll();
-    }
-
     public Vote get(int id) {
         return ValidationUtil.checkNotFoundWithId(getFromToday(id).orElse(null), id);
-    }
-
-    public int getRestaurantId(int userId) {
-        return get(userId).getRestaurant().id();
     }
 
     @Transactional
@@ -44,7 +34,7 @@ public class VoteService {
         if (getFromToday(userId).isPresent()) {
             throw new IllegalRequestDataException("You already have vote on this day! Please try it tomorrow!");
         }
-        Vote vote = new Vote(userService.get(userId), LocalDate.now(), restaurantService.get(restaurantId));
+        Vote vote = new Vote(userService.get(userId), LocalDate.now(), restaurantService.get(restaurantId), true);
         return voteRepository.save(vote);
     }
 

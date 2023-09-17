@@ -11,7 +11,7 @@ import ru.felix.votingservice.service.RestaurantService;
 @Slf4j
 public class ProfileRestaurantController extends AbstractRestaurantController {
 
-    static final String REST_URL = "/api/profile/restaurants";
+    static final String REST_URL = "/api/restaurants";
 
     public ProfileRestaurantController(RestaurantService service) {
         super(service);

@@ -5,11 +5,11 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import ru.felix.votingservice.error.NotFoundException;
 import ru.felix.votingservice.model.Restaurant;
 import ru.felix.votingservice.repository.RestaurantRepository;
 import ru.felix.votingservice.util.validation.ValidationUtil;
@@ -57,7 +57,9 @@ public class RestaurantService {
         ValidationUtil.checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
-    public ResponseEntity<Restaurant> getWithDishes(int restaurantId, LocalDate localDate) {
-        return ResponseEntity.of(repository.getWithDishes(restaurantId, localDate != null ? localDate : LocalDate.now()));
+    //    https://www.educative.io/answers/what-is-the-optionalorelsethrow-method-in-java
+    public Restaurant getWithDishes(int restaurantId, LocalDate localDate) {
+        return repository.getWithDishes(restaurantId, localDate)
+                .orElseThrow(() -> new NotFoundException("This restaurant was not found"));
     }
 }

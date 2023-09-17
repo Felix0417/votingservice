@@ -93,11 +93,11 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void getWithDishes() {
-        RESTAURANT_MATCHER_WITH_DISHES.assertMatch(service.getWithDishes(RESTAURANT1_ID, LocalDate.now()).getBody(), restaurant1);
+        RESTAURANT_MATCHER_WITH_DISHES.assertMatch(service.getWithDishes(RESTAURANT1_ID, LocalDate.now()), restaurant1);
     }
 
     @Test
     void getWithDishesOnEmptyDate() {
-        RESTAURANT_MATCHER.assertMatch(service.getWithDishes(RESTAURANT1_ID, null).getBody(), restaurant1);
+        assertThrows(NotFoundException.class, () -> service.getWithDishes(RESTAURANT1_ID, null));
     }
 }

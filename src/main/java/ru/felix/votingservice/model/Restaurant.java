@@ -1,6 +1,6 @@
 package ru.felix.votingservice.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +20,7 @@ import java.util.List;
 public class Restaurant extends NamedEntity implements Serializable {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @Schema(hidden = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Dish> dishes;
 

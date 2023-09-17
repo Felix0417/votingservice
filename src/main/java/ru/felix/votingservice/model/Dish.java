@@ -1,7 +1,6 @@
 package ru.felix.votingservice.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +20,6 @@ public class Dish extends NamedEntity {
     private Restaurant restaurant;
 
     @Column(name = "of_date", nullable = false)
-    @JsonIgnore
     private LocalDate localDate;
 
     @Column(name = "price", nullable = false)

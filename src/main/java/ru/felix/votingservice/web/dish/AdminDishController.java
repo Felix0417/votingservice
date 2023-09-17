@@ -12,6 +12,8 @@ import ru.felix.votingservice.model.Dish;
 import ru.felix.votingservice.service.DishService;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
 
 import static ru.felix.votingservice.util.validation.ValidationUtil.checkNew;
 
@@ -23,6 +25,17 @@ public class AdminDishController {
     static final String REST_URL = "/api/admin/restaurants";
 
     private final DishService service;
+
+    @GetMapping("/{restaurantId}/dishes")
+    public List<Dish> getAllByRestaurantAndDate(@PathVariable int restaurantId, @RequestParam LocalDate localDate) {
+        return service.getAllByRestaurantFromDate(restaurantId, localDate);
+    }
+
+    @GetMapping("/{restaurantId}/dishes/{dishId}")
+    public Dish getByRestaurant(@PathVariable("restaurantId") int restaurantId, @PathVariable("dishId") int dishId) {
+        log.info("get dish - {} from restaurant - {}", dishId, restaurantId);
+        return service.getByRestaurant(restaurantId, dishId);
+    }
 
     @PostMapping(value = "/{restaurantId}/dishes")
     public ResponseEntity<Dish> create(@PathVariable int restaurantId, @Valid @RequestBody Dish dish) {

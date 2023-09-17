@@ -10,6 +10,8 @@ public class DishTestData {
 
     public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Dish.class, "restaurant", "localDate");
 
+    public static final String INVALID_DATE_OF_CREATE_DISH = "Sorry, your dish must be on today or in future days";
+
     public static final int DISH1_ID = 1;
 
     public static final int DISH2_ID = 2;

@@ -1,6 +1,5 @@
 package ru.felix.votingservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -21,7 +20,6 @@ public class Vote extends BaseEntity implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private User user;
 
     @Column(name = "voting_date", nullable = false)
@@ -32,14 +30,18 @@ public class Vote extends BaseEntity implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    public Vote(Integer id, User user, LocalDate localDate, Restaurant restaurant) {
+    @Column(name = "enabled", nullable = false, columnDefinition = "boolean default true")
+    private boolean enabled;
+
+    public Vote(Integer id, User user, LocalDate localDate, Restaurant restaurant, boolean enabled) {
         super(id);
         this.user = user;
         this.localDate = localDate;
         this.restaurant = restaurant;
+        this.enabled = enabled;
     }
 
     public Vote(Vote vote) {
-        this(vote.id, vote.user, vote.localDate, vote.restaurant);
+        this(vote.id, vote.user, vote.localDate, vote.restaurant, vote.enabled);
     }
 }

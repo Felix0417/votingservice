@@ -56,6 +56,6 @@ public class AdminRestaurantController extends AbstractRestaurantController {
     public Restaurant getWithDishesFromDate(@PathVariable int restaurantId,
                                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate date) {
         log.info("get restaurant - {} with menu from date - {}", restaurantId, date);
-        return service.getWithDishes(restaurantId, date).getBody();
+        return service.getWithDishes(restaurantId, date);
     }
 }
