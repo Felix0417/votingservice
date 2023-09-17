@@ -70,7 +70,7 @@ class DishServiceTest extends AbstractServiceTest {
     @Test
     void updateDuplicateName() {
         Dish updated = DishTestData.getUpdated();
-        updated.setName(dish5.getName());
+        updated.setName(dish4.getName());
         service.update(RESTAURANT1_ID, DISH1_ID, updated);
         assertThrows(DataIntegrityViolationException.class, () -> service.getByRestaurant(RESTAURANT1_ID, DISH1_ID));
     }

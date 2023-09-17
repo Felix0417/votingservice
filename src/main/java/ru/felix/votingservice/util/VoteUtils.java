@@ -11,7 +11,7 @@ public class VoteUtils {
         return new VoteTo(vote.getUser().id(), vote.getRestaurant().id(), vote.getLocalDate());
     }
 
-    public static boolean checkVoteTime(LocalDateTime dateTime) {
-        return dateTime.toLocalTime().isAfter(LocalTime.of(11, 0));
+    public static boolean checkVoteTime(LocalTime localTime) {
+        return localTime.isAfter(LocalTime.of(11, 0));
     }
 }

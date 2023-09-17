@@ -12,6 +12,7 @@ import ru.felix.votingservice.util.validation.ValidationUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ public class VoteService {
         return ValidationUtil.checkNotFoundWithId(getFromToday(id).orElse(null), id);
     }
 
-    public int getRestaurantId(int userId){
+    public int getRestaurantId(int userId) {
         return get(userId).getRestaurant().id();
     }
 
@@ -48,8 +49,8 @@ public class VoteService {
     }
 
     @Transactional
-    public void update(int userId, int restaurantId) {
-        if (VoteUtils.checkVoteTime(LocalDateTime.now())) {
+    public void update(int userId, int restaurantId, LocalTime currentTime) {
+        if (VoteUtils.checkVoteTime(currentTime)) {
             throw new IllegalRequestDataException("Your vote is not updated, because you can do it until 11 a.m.");
         }
         Vote vote = get(userId);

@@ -23,6 +23,10 @@ public class VoteTestData {
 
     public static final String ERR_MSG_LATE_VOTING = "Your vote is not updated, because you can do it until 11 a.m.";
 
+    public static final LocalTime TIME_BEFORE_ELEVEN = LocalTime.of(10, 25);
+
+    public static final LocalTime TIME_AFTER_ELEVEN = LocalTime.of(11, 25);
+
     public final static int VOTE1_ID = 1;
 
     public final static int VOTE2_ID = 2;

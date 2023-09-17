@@ -1,8 +1,6 @@
 package ru.felix.votingservice.service;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIf;
-import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.felix.votingservice.AbstractServiceTest;
 import ru.felix.votingservice.error.IllegalRequestDataException;
@@ -56,29 +54,25 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    @EnabledIf("ru.felix.votingservice.testdata.VoteTestData#isBeforeEleven")
     void update() {
         Vote updated = updated();
-        service.update(USER_ID, RESTAURANT4_ID);
+        service.update(USER_ID, RESTAURANT4_ID, TIME_BEFORE_ELEVEN);
         VOTE_MATCHER.assertMatch(service.get(USER_ID), updated);
     }
 
     @Test
-    @DisabledIf("ru.felix.votingservice.testdata.VoteTestData#isBeforeEleven")
     void updateAfterEleven() {
-        assertThrows(IllegalRequestDataException.class, () -> service.update(USER_ID, RESTAURANT4_ID));
+        assertThrows(IllegalRequestDataException.class, () -> service.update(USER_ID, RESTAURANT4_ID, TIME_AFTER_ELEVEN));
     }
 
     @Test
-    @EnabledIf("ru.felix.votingservice.testdata.VoteTestData#isBeforeEleven")
     void updateNotFoundUserId() {
-        assertThrows(NotFoundException.class, () -> service.update(NOT_FOUND, RESTAURANT1_ID));
+        assertThrows(NotFoundException.class, () -> service.update(NOT_FOUND, RESTAURANT1_ID, TIME_BEFORE_ELEVEN));
     }
 
     @Test
-    @EnabledIf("ru.felix.votingservice.testdata.VoteTestData#isBeforeEleven")
     void updateNotFoundRestaurantId() {
-        assertThrows(IllegalArgumentException.class, () -> service.update(USER_ID, NOT_FOUND_RESTAURANT_ID));
+        assertThrows(NotFoundException.class, () -> service.update(USER_ID, NOT_FOUND_RESTAURANT_ID, TIME_BEFORE_ELEVEN));
     }
 
     @Test
