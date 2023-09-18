@@ -47,11 +47,4 @@ public class ProfileVoteController {
         log.info("updating vote from user - {} and restaurant - {}", user.id(), voteTo.getRestaurantId());
         service.update(user.id(), voteTo.getRestaurantId(), LocalTime.now());
     }
-
-    @DeleteMapping
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal AuthUser user) {
-        log.info("deleting current vote from user - {}", user);
-        service.deleteFromCurrentDate(user.id());
-    }
 }

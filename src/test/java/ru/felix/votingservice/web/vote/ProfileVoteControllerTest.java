@@ -9,7 +9,6 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.felix.votingservice.repository.VoteRepository;
-import ru.felix.votingservice.service.VoteService;
 import ru.felix.votingservice.testdata.UserTestData;
 import ru.felix.votingservice.testdata.VoteTestData;
 import ru.felix.votingservice.to.VoteTo;
@@ -19,7 +18,6 @@ import ru.felix.votingservice.web.AbstractControllerTest;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.felix.votingservice.testdata.VoteTestData.*;
@@ -31,9 +29,6 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     @Autowired
     private VoteRepository repository;
 
-    @Autowired
-    private VoteService service;
-
     @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL))
@@ -42,9 +37,9 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
                 .andExpect(VOTE_MATCHER.contentJson(userVote));
     }
 
+    @WithUserDetails(value = UserTestData.GUEST_MAIL)
     @Test
     void create() throws Exception {
-        service.deleteFromCurrentDate(UserTestData.USER_ID);
         VoteTo newVoteTo = VoteTestData.getNewTo();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -89,13 +84,5 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.detail").value(ERR_MSG_LATE_VOTING));
-    }
-
-    @Test
-    void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL))
-                .andExpect(status().isNoContent());
-
-        assertFalse(repository.getByIdOnCurrentDate(userVoteTo.getUserId()).isPresent());
     }
 }

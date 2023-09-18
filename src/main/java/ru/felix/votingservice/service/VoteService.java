@@ -34,7 +34,7 @@ public class VoteService {
         if (getFromToday(userId).isPresent()) {
             throw new IllegalRequestDataException("You already have vote on this day! Please try it tomorrow!");
         }
-        Vote vote = new Vote(userService.get(userId), LocalDate.now(), restaurantService.get(restaurantId), true);
+        Vote vote = new Vote(userService.get(userId), LocalDate.now(), restaurantService.get(restaurantId));
         return voteRepository.save(vote);
     }
 
@@ -47,16 +47,6 @@ public class VoteService {
         Assert.notNull(vote, "vote must not be null");
         vote.setRestaurant(restaurantService.get(restaurantId));
         ValidationUtil.checkNotFoundWithId(voteRepository.save(vote), vote.id());
-    }
-
-    public int getWinnerRestaurantIdFromDate(LocalDate date) {
-        Assert.notNull(date, "date must not be null");
-        return ValidationUtil.checkNotFound(voteRepository.getWinnerFromDate(date), "date " + date);
-    }
-
-    @Transactional
-    public void deleteFromCurrentDate(int userId) {
-        voteRepository.delete(get(userId));
     }
 
     private Optional<Vote> getFromToday(int userId) {

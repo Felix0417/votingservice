@@ -7,7 +7,6 @@ import ru.felix.votingservice.web.MatcherFactory;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 import static ru.felix.votingservice.testdata.RestaurantTestData.*;
 import static ru.felix.votingservice.testdata.UserTestData.*;
@@ -23,8 +22,6 @@ public class VoteTestData {
 
     public static final String ERR_MSG_LATE_VOTING = "Your vote is not updated, because you can do it until 11 a.m.";
 
-    public static final String ERR_MSG_NOT_FOUND_FROM_DATE = "Not found entity with date 2001-01-01";
-
     public static final LocalTime TIME_BEFORE_ELEVEN = LocalTime.of(10, 25);
 
     public static final LocalTime TIME_AFTER_ELEVEN = LocalTime.of(11, 25);
@@ -39,23 +36,15 @@ public class VoteTestData {
 
     public final static int VOTE_NOT_FOUND_ID = Integer.MAX_VALUE;
 
-    public static final Vote userVote = new Vote(VOTE1_ID, user, LocalDate.now(), restaurant1, true);
-    public static final Vote adminVote = new Vote(VOTE2_ID, admin, LocalDate.now(), restaurant1, true);
-    public static final Vote guestVote = new Vote(VOTE3_ID, guest, LocalDate.now(), restaurant2, true);
-    public static final Vote userOldVote = new Vote(VOTE4_ID, user, LocalDate.of(2020, 1, 31), restaurant2, true);
+    public static final Vote userVote = new Vote(VOTE1_ID, user, LocalDate.now(), restaurant1);
+    public static final Vote adminVote = new Vote(VOTE2_ID, admin, LocalDate.now(), restaurant1);
+    public static final Vote guestVote = new Vote(VOTE3_ID, guest, LocalDate.now(), restaurant2);
+    public static final Vote userOldVote = new Vote(VOTE4_ID, user, LocalDate.of(2020, 1, 31), restaurant2);
 
     public static final VoteTo userVoteTo = VoteUtils.getTo(userVote);
     public static final VoteTo adminVoteTo = VoteUtils.getTo(adminVote);
     public static final VoteTo guestVoteTo = VoteUtils.getTo(guestVote);
     public static final VoteTo userOldVoteTo = VoteUtils.getTo(userOldVote);
-
-    public static List<Vote> getAll() {
-        return List.of(userVote, adminVote, guestVote, userOldVote);
-    }
-
-    public static List<VoteTo> getAllTo() {
-        return List.of(userVoteTo, adminVoteTo, guestVoteTo, userOldVoteTo);
-    }
 
     public static VoteTo getNewTo() {
         return new VoteTo(null, RESTAURANT3_ID, null);

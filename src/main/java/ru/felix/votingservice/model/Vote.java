@@ -30,18 +30,14 @@ public class Vote extends BaseEntity implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    @Column(name = "enabled", nullable = false, columnDefinition = "boolean default true")
-    private boolean enabled;
-
-    public Vote(Integer id, User user, LocalDate localDate, Restaurant restaurant, boolean enabled) {
+    public Vote(Integer id, User user, LocalDate localDate, Restaurant restaurant) {
         super(id);
         this.user = user;
         this.localDate = localDate;
         this.restaurant = restaurant;
-        this.enabled = enabled;
     }
 
     public Vote(Vote vote) {
-        this(vote.id, vote.user, vote.localDate, vote.restaurant, vote.enabled);
+        this(vote.id, vote.user, vote.localDate, vote.restaurant);
     }
 }
