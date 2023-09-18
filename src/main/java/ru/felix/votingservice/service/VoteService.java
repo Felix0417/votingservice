@@ -8,6 +8,7 @@ import ru.felix.votingservice.error.IllegalRequestDataException;
 import ru.felix.votingservice.error.NotFoundException;
 import ru.felix.votingservice.model.Vote;
 import ru.felix.votingservice.repository.VoteRepository;
+import ru.felix.votingservice.util.ClockHolder;
 import ru.felix.votingservice.util.VoteUtils;
 import ru.felix.votingservice.util.validation.ValidationUtil;
 
@@ -40,8 +41,8 @@ public class VoteService {
     }
 
     @Transactional
-    public void update(int userId, int restaurantId, LocalTime currentTime) {
-        if (VoteUtils.isValidTime(currentTime)) {
+    public void update(int userId, int restaurantId) {
+        if (VoteUtils.isValidTime(LocalTime.now(ClockHolder.getClock()))) {
             throw new IllegalRequestDataException("Your vote is not updated, because you can do it until 11 a.m.");
         }
         Vote vote = get(userId);

@@ -12,8 +12,6 @@ import ru.felix.votingservice.to.VoteTo;
 import ru.felix.votingservice.util.VoteUtils;
 import ru.felix.votingservice.web.AuthUser;
 
-import java.time.LocalTime;
-
 @RestController
 @RequestMapping(path = ProfileVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
@@ -44,6 +42,6 @@ public class ProfileVoteController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@AuthenticationPrincipal AuthUser user, @RequestBody VoteTo voteTo) {
         log.info("updating vote from user - {} and restaurant - {}", user.id(), voteTo.getRestaurantId());
-        service.update(user.id(), voteTo.getRestaurantId(), LocalTime.now());
+        service.update(user.id(), voteTo.getRestaurantId());
     }
 }

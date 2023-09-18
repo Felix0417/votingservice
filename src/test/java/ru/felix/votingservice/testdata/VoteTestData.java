@@ -2,11 +2,11 @@ package ru.felix.votingservice.testdata;
 
 import ru.felix.votingservice.model.Vote;
 import ru.felix.votingservice.to.VoteTo;
+import ru.felix.votingservice.util.ClockHolder;
 import ru.felix.votingservice.util.VoteUtils;
 import ru.felix.votingservice.web.MatcherFactory;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 
 import static ru.felix.votingservice.testdata.RestaurantTestData.*;
 import static ru.felix.votingservice.testdata.UserTestData.*;
@@ -22,9 +22,9 @@ public class VoteTestData {
 
     public static final String ERR_MSG_LATE_VOTING = "Your vote is not updated, because you can do it until 11 a.m.";
 
-    public static final LocalTime TIME_BEFORE_ELEVEN = LocalTime.of(10, 25);
+    public static final LocalDateTime TODAY_BEFORE_ELEVEN = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 30));
 
-    public static final LocalTime TIME_AFTER_ELEVEN = LocalTime.of(11, 25);
+    public static final LocalDateTime TODAY_AFTER_ELEVEN = LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 5));
 
     public final static int VOTE1_ID = 1;
 
@@ -62,8 +62,8 @@ public class VoteTestData {
         return updated;
     }
 
-    //    https://junit.org/junit5/docs/current/user-guide/#writing-tests-conditional-execution-custom
-    public static boolean isBeforeEleven() {
-        return LocalTime.now().isBefore(LocalTime.of(11, 0));
+    public static void setUpClock(LocalDateTime localDateTime) {
+        final Clock fixed = Clock.fixed(localDateTime.toInstant(ZoneOffset.UTC), ZoneOffset.UTC);
+        ClockHolder.setClock(fixed);
     }
 }

@@ -46,23 +46,27 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
+        VoteTestData.setUpClock(TODAY_BEFORE_ELEVEN);
         Vote updated = updated();
-        service.update(USER_ID, RESTAURANT4_ID, TIME_BEFORE_ELEVEN);
+        service.update(USER_ID, RESTAURANT4_ID);
         VOTE_MATCHER.assertMatch(service.get(USER_ID), updated);
     }
 
     @Test
     void updateAfterEleven() {
-        assertThrows(IllegalRequestDataException.class, () -> service.update(USER_ID, RESTAURANT4_ID, TIME_AFTER_ELEVEN));
+        VoteTestData.setUpClock(TODAY_AFTER_ELEVEN);
+        assertThrows(IllegalRequestDataException.class, () -> service.update(USER_ID, RESTAURANT4_ID));
     }
 
     @Test
     void updateNotFoundUserId() {
-        assertThrows(NotFoundException.class, () -> service.update(NOT_FOUND, RESTAURANT1_ID, TIME_BEFORE_ELEVEN));
+        VoteTestData.setUpClock(TODAY_BEFORE_ELEVEN);
+        assertThrows(NotFoundException.class, () -> service.update(NOT_FOUND, RESTAURANT1_ID));
     }
 
     @Test
     void updateNotFoundRestaurantId() {
-        assertThrows(NotFoundException.class, () -> service.update(USER_ID, NOT_FOUND_RESTAURANT_ID, TIME_BEFORE_ELEVEN));
+        VoteTestData.setUpClock(TODAY_BEFORE_ELEVEN);
+        assertThrows(NotFoundException.class, () -> service.update(USER_ID, NOT_FOUND_RESTAURANT_ID));
     }
 }

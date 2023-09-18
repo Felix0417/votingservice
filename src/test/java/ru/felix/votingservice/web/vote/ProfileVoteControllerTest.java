@@ -1,8 +1,6 @@
 package ru.felix.votingservice.web.vote;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIf;
-import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -63,8 +61,8 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @EnabledIf("ru.felix.votingservice.testdata.VoteTestData#isBeforeEleven")
     void update() throws Exception {
+        setUpClock(TODAY_BEFORE_ELEVEN);
         VoteTo updated = VoteTestData.updatedTo();
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -76,8 +74,8 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @DisabledIf("ru.felix.votingservice.testdata.VoteTestData#isBeforeEleven")
     void wrongUpdate() throws Exception {
+        setUpClock(TODAY_AFTER_ELEVEN);
         VoteTo updated = VoteTestData.updatedTo();
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
