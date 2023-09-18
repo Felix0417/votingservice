@@ -34,7 +34,7 @@ public class AdminDishController {
     @GetMapping("/{restaurantId}/dishes/{dishId}")
     public Dish getByRestaurant(@PathVariable("restaurantId") int restaurantId, @PathVariable("dishId") int dishId) {
         log.info("get dish - {} from restaurant - {}", dishId, restaurantId);
-        return service.getByRestaurant(restaurantId, dishId);
+        return service.getByRestaurantIdAndId(restaurantId, dishId);
     }
 
     @PostMapping(value = "/{restaurantId}/dishes")

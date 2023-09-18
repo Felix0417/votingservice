@@ -44,7 +44,7 @@ public class RestaurantTestData {
 
     public static final Restaurant restaurantWithOldDishes = new Restaurant(RESTAURANT1_ID, "Яръ");
 
-    public static final List<Restaurant> restaurants = List.of(restaurant1, restaurant2, restaurant3, restaurant4, restaurant5);
+    public static final List<Restaurant> restaurants = List.of(restaurant3, restaurant4, restaurant2, restaurant5, restaurant1);
 
     static {
         restaurant1.setDishes(DishTestData.dishesFromRestaurant1);

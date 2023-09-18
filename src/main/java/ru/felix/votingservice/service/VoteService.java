@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.felix.votingservice.error.IllegalRequestDataException;
+import ru.felix.votingservice.error.NotFoundException;
 import ru.felix.votingservice.model.Vote;
 import ru.felix.votingservice.repository.VoteRepository;
 import ru.felix.votingservice.util.VoteUtils;
@@ -26,7 +27,7 @@ public class VoteService {
     private final RestaurantService restaurantService;
 
     public Vote get(int id) {
-        return ValidationUtil.checkNotFoundWithId(getFromToday(id).orElse(null), id);
+        return getFromToday(id).orElseThrow(() -> new NotFoundException("vote was not found"));
     }
 
     @Transactional
@@ -40,7 +41,7 @@ public class VoteService {
 
     @Transactional
     public void update(int userId, int restaurantId, LocalTime currentTime) {
-        if (VoteUtils.checkVoteTime(currentTime)) {
+        if (VoteUtils.isValidTime(currentTime)) {
             throw new IllegalRequestDataException("Your vote is not updated, because you can do it until 11 a.m.");
         }
         Vote vote = get(userId);
@@ -50,6 +51,6 @@ public class VoteService {
     }
 
     private Optional<Vote> getFromToday(int userId) {
-        return voteRepository.getByIdOnCurrentDate(userId);
+        return voteRepository.getByUserId(userId);
     }
 }

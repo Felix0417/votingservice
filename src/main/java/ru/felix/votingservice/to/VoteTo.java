@@ -1,6 +1,5 @@
 package ru.felix.votingservice.to;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,7 +15,6 @@ public class VoteTo {
 
     private Integer userId;
 
-    @NotBlank
     private Integer restaurantId;
 
     private LocalDate localDate;

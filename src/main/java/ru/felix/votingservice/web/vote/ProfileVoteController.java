@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.felix.votingservice.model.Vote;
 import ru.felix.votingservice.service.VoteService;
 import ru.felix.votingservice.to.VoteTo;
 import ru.felix.votingservice.util.VoteUtils;
@@ -26,10 +25,10 @@ public class ProfileVoteController {
     private final VoteService service;
 
     @GetMapping
-    public Vote get() {
+    public Integer get() {
         int userId = AuthUser.authId();
         log.info("get Vote by id - {}", userId);
-        return service.get(userId);
+        return service.get(userId).getId();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

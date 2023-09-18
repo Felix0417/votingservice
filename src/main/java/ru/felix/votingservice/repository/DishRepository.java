@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface DishRepository extends BaseRepository<Dish> {
 
     @Query("SELECT d FROM Dish d WHERE d.restaurant.id=:restaurantId AND d.id=:dishId AND d.localDate=CURRENT_DATE ")
-    Optional<Dish> findByRestaurantIdAndId(@Param("restaurantId") int restaurantId, @Param("dishId") int dishId);
+    Optional<Dish> getByRestaurantId(@Param("restaurantId") int restaurantId, @Param("dishId") int dishId);
 
     @Modifying
     @Transactional

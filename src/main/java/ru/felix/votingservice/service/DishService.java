@@ -12,7 +12,6 @@ import ru.felix.votingservice.repository.RestaurantRepository;
 import ru.felix.votingservice.util.validation.ValidationUtil;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
@@ -27,8 +26,8 @@ public class DishService {
 
     private final RestaurantRepository restaurantRepository;
 
-    public Dish getByRestaurant(int restaurantId, int dishId) {
-        return checkNotFoundWithId(dishRepository.findByRestaurantIdAndId(restaurantId, dishId).orElse(null), dishId);
+    public Dish getByRestaurantIdAndId(int restaurantId, int dishId) {
+        return checkNotFoundWithId(dishRepository.getByRestaurantId(restaurantId, dishId).orElse(null), dishId);
     }
 
     public List<Dish> getAllByRestaurantFromDate(int restaurantId, LocalDate localDate) {
@@ -53,7 +52,7 @@ public class DishService {
     public void update(int restaurantId, int dishId, Dish dish) {
         Assert.notNull(dish, "dish must not be null");
         assureIdConsistent(dish, dishId);
-        Dish updateDish = getByRestaurant(restaurantId, dishId);
+        Dish updateDish = getByRestaurantIdAndId(restaurantId, dishId);
         updateDish.setPrice(dish.getPrice());
         updateDish.setName(dish.getName());
         dishRepository.save(updateDish);

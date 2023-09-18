@@ -21,17 +21,17 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void getByRestaurant() {
-        DISH_MATCHER.assertMatch(service.getByRestaurant(RESTAURANT1_ID, DISH1_ID), dish1);
+        DISH_MATCHER.assertMatch(service.getByRestaurantIdAndId(RESTAURANT1_ID, DISH1_ID), dish1);
     }
 
     @Test
     void getByRestaurantIdNotFound() {
-        assertThrows(NotFoundException.class, () -> service.getByRestaurant(DISH_NOT_FOUND_ID, DISH1_ID));
+        assertThrows(NotFoundException.class, () -> service.getByRestaurantIdAndId(DISH_NOT_FOUND_ID, DISH1_ID));
     }
 
     @Test
     void getByRestaurantDishIdNotFound() {
-        assertThrows(NotFoundException.class, () -> service.getByRestaurant(RESTAURANT1_ID, DISH_NOT_FOUND_ID));
+        assertThrows(NotFoundException.class, () -> service.getByRestaurantIdAndId(RESTAURANT1_ID, DISH_NOT_FOUND_ID));
     }
 
     @Test
@@ -41,7 +41,7 @@ class DishServiceTest extends AbstractServiceTest {
         Dish newDish = DishTestData.getNew();
         newDish.setId(newId);
         DISH_MATCHER.assertMatch(created, newDish);
-        DISH_MATCHER.assertMatch(service.getByRestaurant(RESTAURANT1_ID, newId), newDish);
+        DISH_MATCHER.assertMatch(service.getByRestaurantIdAndId(RESTAURANT1_ID, newId), newDish);
     }
 
     @Test
@@ -64,7 +64,7 @@ class DishServiceTest extends AbstractServiceTest {
     void update() {
         Dish updated = DishTestData.getUpdated();
         service.update(RESTAURANT1_ID, DISH1_ID, updated);
-        DISH_MATCHER.assertMatch(service.getByRestaurant(RESTAURANT1_ID, DISH1_ID), updated);
+        DISH_MATCHER.assertMatch(service.getByRestaurantIdAndId(RESTAURANT1_ID, DISH1_ID), updated);
     }
 
     @Test
@@ -72,7 +72,7 @@ class DishServiceTest extends AbstractServiceTest {
         Dish updated = DishTestData.getUpdated();
         updated.setName(dish4.getName());
         service.update(RESTAURANT1_ID, DISH1_ID, updated);
-        assertThrows(DataIntegrityViolationException.class, () -> service.getByRestaurant(RESTAURANT1_ID, DISH1_ID));
+        assertThrows(DataIntegrityViolationException.class, () -> service.getByRestaurantIdAndId(RESTAURANT1_ID, DISH1_ID));
     }
 
     @Test
@@ -96,7 +96,7 @@ class DishServiceTest extends AbstractServiceTest {
     @Test
     void delete() {
         service.delete(RESTAURANT1_ID, DISH1_ID);
-        assertThrows(NotFoundException.class, () -> service.getByRestaurant(RESTAURANT1_ID, DISH1_ID));
+        assertThrows(NotFoundException.class, () -> service.getByRestaurantIdAndId(RESTAURANT1_ID, DISH1_ID));
     }
 
     @Test
