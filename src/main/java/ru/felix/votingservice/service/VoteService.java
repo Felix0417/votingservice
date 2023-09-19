@@ -1,11 +1,13 @@
 package ru.felix.votingservice.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.felix.votingservice.error.IllegalRequestDataException;
 import ru.felix.votingservice.error.NotFoundException;
+import ru.felix.votingservice.model.User;
 import ru.felix.votingservice.model.Vote;
 import ru.felix.votingservice.repository.VoteRepository;
 import ru.felix.votingservice.util.ClockHolder;
@@ -23,7 +25,7 @@ public class VoteService {
 
     private final VoteRepository voteRepository;
 
-    private final UserService userService;
+    private final EntityManager entityManager;
 
     private final RestaurantService restaurantService;
 
@@ -32,11 +34,12 @@ public class VoteService {
     }
 
     @Transactional
-    public Vote create(int userId, int restaurantId) {
-        if (getFromToday(userId).isPresent()) {
+    public Vote create(User user, int restaurantId) {
+        if (getFromToday(user.id()).isPresent()) {
             throw new IllegalRequestDataException("You already have vote on this day! Please try it tomorrow!");
         }
-        Vote vote = new Vote(userService.get(userId), LocalDate.now(), restaurantService.get(restaurantId));
+        user = entityManager.merge(user);
+        Vote vote = new Vote(user, LocalDate.now(), restaurantService.get(restaurantId));
         return voteRepository.save(vote);
     }
 

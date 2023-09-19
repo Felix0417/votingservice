@@ -1,10 +1,12 @@
 package ru.felix.votingservice.service;
 
+import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.felix.votingservice.AbstractServiceTest;
 import ru.felix.votingservice.error.IllegalRequestDataException;
 import ru.felix.votingservice.error.NotFoundException;
+import ru.felix.votingservice.model.User;
 import ru.felix.votingservice.model.Vote;
 import ru.felix.votingservice.testdata.VoteTestData;
 
@@ -21,6 +23,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void get() {
         Vote vote = service.get(VoteTestData.VOTE1_ID);
+        vote.setUser((User) Hibernate.unproxy(vote.getUser()));
         VOTE_MATCHER.assertMatch(vote, userVote);
     }
 
@@ -31,7 +34,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Vote created = service.create(GUEST_ID, RESTAURANT2_ID);
+        Vote created = service.create(guest, RESTAURANT2_ID);
         int newId = created.id();
         Vote newVote = new Vote(guestVote);
         newVote.setId(newId);
@@ -41,7 +44,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void createDuplicate() {
-        assertThrows(IllegalRequestDataException.class, () -> service.create(USER_ID, RESTAURANT1_ID));
+        assertThrows(IllegalRequestDataException.class, () -> service.create(user, RESTAURANT1_ID));
     }
 
     @Test
@@ -49,7 +52,9 @@ class VoteServiceTest extends AbstractServiceTest {
         VoteTestData.setUpClock(TODAY_BEFORE_ELEVEN);
         Vote updated = updated();
         service.update(USER_ID, RESTAURANT4_ID);
-        VOTE_MATCHER.assertMatch(service.get(USER_ID), updated);
+        Vote expectedVote = service.get(USER_ID);
+        expectedVote.setUser((User) Hibernate.unproxy(expectedVote.getUser()));
+        VOTE_MATCHER.assertMatch(expectedVote, updated);
     }
 
     @Test

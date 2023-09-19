@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class Vote extends BaseEntity implements Serializable {
 
     @JoinColumn(name = "user_id", nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 

@@ -33,7 +33,7 @@ public class ProfileVoteController {
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<VoteTo> create(@AuthenticationPrincipal AuthUser user, @RequestBody VoteTo voteTo) {
         log.info("saving new vote from user - {} and restaurant - {}", user, voteTo.getRestaurantId());
-        VoteTo newVoteto = VoteUtils.getTo(service.create(user.id(), voteTo.getRestaurantId()));
+        VoteTo newVoteto = VoteUtils.getTo(service.create(user.getUser(), voteTo.getRestaurantId()));
         return ResponseEntity.ok().body(newVoteto);
     }
 
