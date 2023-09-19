@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import ru.felix.votingservice.AbstractServiceTest;
-import ru.felix.votingservice.error.IllegalRequestDataException;
 import ru.felix.votingservice.error.NotFoundException;
 import ru.felix.votingservice.model.Restaurant;
 
@@ -58,7 +57,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void update() {
         Restaurant updated = getUpdated();
-        service.update(updated.id(), updated);
+        service.update(updated);
         RESTAURANT_MATCHER.assertMatch(service.get(RESTAURANT1_ID), updated);
     }
 
@@ -66,18 +65,13 @@ class RestaurantServiceTest extends AbstractServiceTest {
     void updateDuplicateName() {
         Restaurant updated = getUpdated();
         updated.setName(restaurant2.getName());
-        service.update(RESTAURANT1_ID, updated);
+        service.update(updated);
         assertThrows(DataIntegrityViolationException.class, () -> service.getAll());
     }
 
     @Test
     void updateNull() {
-        assertThrows(IllegalArgumentException.class, () -> service.update(RESTAURANT1_ID, null));
-    }
-
-    @Test
-    void updateNotSameId() {
-        assertThrows(IllegalRequestDataException.class, () -> service.update(NOT_FOUND_RESTAURANT_ID, getUpdated()));
+        assertThrows(IllegalArgumentException.class, () -> service.update(null));
     }
 
     @Test

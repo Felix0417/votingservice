@@ -29,8 +29,8 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     private RestaurantRepository repository;
 
     @Test
-    public void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(ProfileRestaurantController.REST_URL))
+    public void getAllWithDishes() throws Exception {
+        perform(MockMvcRequestBuilders.get(AdminRestaurantController.REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

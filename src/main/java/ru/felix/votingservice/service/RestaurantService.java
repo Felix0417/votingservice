@@ -17,11 +17,8 @@ import ru.felix.votingservice.util.validation.ValidationUtil;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.felix.votingservice.util.validation.ValidationUtil.assureIdConsistent;
-
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @CacheConfig(cacheNames = "restaurants")
 public class RestaurantService {
 
@@ -29,7 +26,7 @@ public class RestaurantService {
 
     @Cacheable
     public List<Restaurant> getAll() {
-        return repository.getAll();
+        return repository.getAllWithDishes();
     }
 
     public Restaurant get(int id) {
@@ -46,9 +43,8 @@ public class RestaurantService {
     @CacheEvict(allEntries = true)
     @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Restaurant update(int restaurantId, Restaurant restaurant) {
+    public Restaurant update(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
-        assureIdConsistent(restaurant, restaurantId);
         return ValidationUtil.checkNotFoundWithId(repository.save(restaurant), restaurant.id());
     }
 

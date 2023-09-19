@@ -19,7 +19,7 @@ public class ProfileRestaurantControllerTest extends AbstractControllerTest {
     private static final String REST_URL_SLASH = REST_URL + "/";
 
     @Test
-    public void getAll() throws Exception {
+    public void getAllWithDishes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())

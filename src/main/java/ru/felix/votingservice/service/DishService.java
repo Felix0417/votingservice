@@ -19,7 +19,6 @@ import static ru.felix.votingservice.util.validation.ValidationUtil.checkNotFoun
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class DishService {
 
     private final DishRepository dishRepository;
@@ -61,5 +60,4 @@ public class DishService {
     public void delete(int restaurantId, int dishId) {
         checkNotFoundWithId(dishRepository.deleteByRestaurantIdAndId(restaurantId, dishId) != 0, dishId);
     }
-
 }
